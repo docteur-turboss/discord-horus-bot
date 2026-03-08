@@ -1,0 +1,38 @@
+{
+  "name": "discord-horus-bot",
+  "version": "0.0.0",
+  "description": "Discord bot of community server",
+  "keywords": [
+    "discord",
+    "bot"
+  ],
+  "homepage": "https://github.com/docteur-turboss/discord-horus-bot#readme",
+  "bugs": {
+    "url": "https://github.com/docteur-turboss/discord-horus-bot/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/docteur-turboss/discord-horus-bot.git"
+  },
+  "license": "ISC",
+  "author": "Alchimist Horus Turboss <@docteur-turboss>",
+  "type": "commonjs",
+  "main": "./dist/app/index.js",
+  "scripts": {
+    "test": "jest"
+  },
+  "dependencies": {
+    "discord.js": "^14.25.1",
+    "zod": "^4.3.6"
+  },
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "@jest/globals": "^30.2.0",
+    "eslint": "^10.0.2",
+    "globals": "^17.4.0",
+    "jest": "^30.2.0",
+    "ts-jest": "^29.4.6",
+    "typescript": "^5.9.3",
+    "typescript-eslint": "^8.56.1"
+  }
+}

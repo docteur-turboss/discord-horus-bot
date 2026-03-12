@@ -1,6 +1,6 @@
 import en from "../../locales/en.json";
 import fr from "../../locales/fr.json";
-import { ChatInputCommandInteraction } from "discord.js";
+import { ButtonInteraction, ChatInputCommandInteraction } from "discord.js";
 
 const translations: Record<string, any> = {
   en,
@@ -8,7 +8,7 @@ const translations: Record<string, any> = {
 };
 
 export const t = (
-  interaction: ChatInputCommandInteraction,
+  interaction: ChatInputCommandInteraction | ButtonInteraction,
   key: string,
   vars?: Record<string, string>
 ) => {

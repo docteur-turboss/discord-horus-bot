@@ -1,0 +1,21 @@
+{
+  "errors.guild_only": "This command can only be used in a server.",
+  "errors.no_command_found": "How the hell did you even get this error?",
+  "errors.no_permission_ban": "You don't have permission to ban members.",
+  "errors.bot_no_permission_ban": "I don't have permission to ban members.",
+  "errors.self_ban": "You can't ban yourself.",
+  "errors.owner_ban": "You can't ban the server owner.",
+  "errors.user_not_found": "User not found in this server.",
+  "errors.not_bannable": "I cannot ban this user. They may have higher permissions.",
+  "errors.command_execution": "There was an error while executing this command!",
+  "errors.invalid_user_id": "The provided user ID is invalid.",
+  "errors.no_permission_unban": "You don't have permission to unban members.",
+  "errors.bot_no_permission_unban": "I don't have permission to unban members.",
+  "errors.user_not_banned": "This user is not banned.",
+
+  "cooldown.active": "Please wait, you are on a cooldown for `{command}`. You can use it again {time}.",
+
+  "moderation.no_reason": "No reason provided",
+  "moderation.unban_success": "🔓 {user} has been unbanned.",
+  "moderation.ban_success": "✅ {user} has been banned.\nReason: {reason}"
+}

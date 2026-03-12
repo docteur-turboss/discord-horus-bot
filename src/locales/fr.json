@@ -12,9 +12,16 @@
   "errors.no_permission_unban": "Vous n'avez pas la permission de débannir des membres.",
   "errors.bot_no_permission_unban": "Je n'ai pas la permission de débannir des membres.",
   "errors.user_not_banned": "Cet utilisateur n'est pas banni.",
+  "errors.not_command_author": "Seul l'auteur de la commande peut utiliser ces boutons.",
 
   "cooldown.active": "Veuillez patienter, la commande `{command}` est en cooldown. Vous pourrez l'utiliser à nouveau {time}.",
 
+  "action.btns.confirm": "Confirmer",
+  "action.btns.cancel": "Annuler",
+
+  "moderation.ban_confirm": "⚠️ Êtes-vous sûr de vouloir bannir **{user}** ?",
+  "moderation.unban_confirm": "⚠️ Êtes-vous sûr de vouloir débannir **{user}** ?",
+  "moderation.action_cancelled": "Votre action est annulée. Passez une excellente journée !",
   "moderation.no_reason": "Aucune raison fournie",
   "moderation.ban_success": "✅ {user} a été banni.\nRaison : {reason}",
   "moderation.unban_success": "🔓 {user} a été débanni."

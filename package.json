@@ -19,7 +19,10 @@
   "type": "commonjs",
   "main": "./dist/app/index.js",
   "scripts": {
-    "test": "jest"
+    "test": "jest",
+    "eslint": "npx eslint src/**/*.{ts,js}",
+    "commit": "npx gitmoji -c",
+    "build": "tsc"
   },
   "dependencies": {
     "discord.js": "^14.25.1",

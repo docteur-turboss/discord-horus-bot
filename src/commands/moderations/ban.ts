@@ -1,7 +1,19 @@
-import { ChatInputCommandInteraction, SlashCommandBuilder, PermissionFlagsBits, GuildMember, EmbedBuilder } from "discord.js";
-import { followUpError, replyError, replySuccess } from "utils/discord/reply";
+import { 
+  ChatInputCommandInteraction, 
+  InteractionCallbackResponse,
+  SlashCommandBuilder, 
+  PermissionFlagsBits, 
+  ActionRowBuilder,
+  ComponentType, 
+  ButtonBuilder, 
+  ButtonStyle, 
+  GuildMember,
+} from "discord.js";
+import { checkPermissions } from "utils/validation/checkPermissions";
+import { reply, editReply, followUp } from "utils/discord/reply";
 import { logger } from "utils/logger/logger";
 import { t } from "utils/locales/i18n";
+import { createConfirmationButtons } from "utils/buttons/confirmationBtn";
 
 export const data = new SlashCommandBuilder()
 .setName("ban")
@@ -22,12 +34,11 @@ export const data = new SlashCommandBuilder()
 export const cooldown = 5;
 
 export const main = async (interaction: ChatInputCommandInteraction) => {
-
-
   try {
-    if (!interaction.guild) return await replyError(interaction, {
+    if (!interaction.guild) return await reply(interaction, {
       key: "errors.guild_only",
-      ephemeral: true
+      ephemeral: true,
+      type: "error"
     });
 
     const targetUser = interaction.options.getUser("user", true);
@@ -41,47 +52,110 @@ export const main = async (interaction: ChatInputCommandInteraction) => {
 
     const botMember = interaction.guild.members.me;
 
+    const perms = checkPermissions(member, botMember!);
+    
     // Check user permission
-    if (!member.permissions.has(PermissionFlagsBits.BanMembers)) return await replyError(interaction, {
+    if (!perms.canBan) return await reply(interaction, {
       key: "errors.no_permission_ban",
-      ephemeral: true
+      ephemeral: true,
+      type: "error"
     })
 
     // Check bot permission
-    if (!botMember?.permissions.has(PermissionFlagsBits.BanMembers)) return await replyError(interaction, {
+    if (!perms.botCanBan) return await reply(interaction, {
       key: "errors.bot_no_permission_ban",
-      ephemeral: true
+      ephemeral: true,
+      type: "error"
     })
       
     // Prevent self ban
-    if (targetUser.id === interaction.user.id) return await replyError(interaction, {
+    if (targetUser.id === interaction.user.id) return await reply(interaction, {
       key: "errors.self_ban",
       ephemeral: true,
+      type: "error"
     })
       
     // Prevent banning server owner
-    if (targetUser.id === interaction.guild.ownerId) return await replyError(interaction, {
+    if (targetUser.id === interaction.guild.ownerId) return await reply(interaction, {
       key: "errors.owner_ban",
       ephemeral: true,
+      type: "error"
     })
       
     // Check if member exists in guild
-    if (!targetMember) return await replyError(interaction, {
+    if (!targetMember) return await reply(interaction, {
       key: "errors.user_not_found",
       ephemeral: true,
+      type: "error"
     })
       
     // Check bannable
-    if (!targetMember.bannable) return await replyError(interaction, {
+    if (!targetMember.bannable) return await reply(interaction, {
       key: "errors.not_bannable",
       ephemeral: true,
+      type: "error"
     })
       
-    await targetMember.ban({ reason });
+    const confirmRow = createConfirmationButtons(interaction);
+    const confirmation = await reply(interaction, {
+      key: "moderation.ban_confirm",
+      vars: { user: targetUser.tag },
+      components: [confirmRow],
+      type: "warning",
+      ephemeral: true,
+    }) as unknown as InteractionCallbackResponse<true>;
 
-    await replySuccess(interaction, {
-      key: "moderation.ban_success",
-    })
+    const msg =
+      "resource" in confirmation && confirmation.resource?.message
+        ? confirmation.resource.message
+        : null;
+
+    if(!msg) return await editReply(interaction, {
+      key: "errors.command_execution",
+      type: "error",
+      components: [],
+    });
+
+    const collector = msg.createMessageComponentCollector({
+      componentType: ComponentType.Button,
+      time: 15_000,
+    });
+
+    collector.on("collect", async (i) => {
+      if (i.user.id !== interaction.user.id) return await reply(i, {
+        key: "errors.not_command_author",
+        ephemeral: true,
+        type: "error",
+      })
+
+      if (i.customId === "cancel_ban") return await editReply(i, {
+        key: "moderation.action_cancelled",
+        components: [],
+        type: "info"
+      });
+
+      if (i.customId === "confirm_ban") {
+        await targetMember.ban({ reason });
+        collector.stop();
+
+        await editReply(interaction, {
+          key: "moderation.ban_success",
+          components: [],
+          vars: {
+            user: targetUser.tag,
+            reason
+          }
+        });
+      }
+    });
+
+    collector.on("end", async (collected, reason) => {
+      if (reason === "time") await editReply(interaction, {
+          key: "moderation.action_cancelled",
+          components: [],
+          type: "info"
+        });
+    });
 
     /*
     ========================================
@@ -121,14 +195,16 @@ export const main = async (interaction: ChatInputCommandInteraction) => {
   } catch (err) {
     logger.error("Error executing ban command:", err as Record<string, unknown>);
 
-    if (!interaction.replied) return await replyError(interaction, {
+    if (!interaction.replied) return await reply(interaction, {
       key: "errors.command_execution",
       ephemeral: true,
+      type: "error",
     })
       
-    return await followUpError(interaction, {
+    return await followUp(interaction, {
       key: "errors.command_execution",
       ephemeral: true,
+      type: "error",
     })
   }
 }

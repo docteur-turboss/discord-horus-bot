@@ -1,5 +1,5 @@
 import { LogEntry, LogLevel } from "./logger.types";
-import { writeFile } from "fs";
+import { existsSync, mkdirSync, writeFile } from "fs";
 import path from "path";
 
 
@@ -102,7 +102,11 @@ export class Logger {
             userId: this.userId || undefined,
         };
 
-        writeFile(path.resolve('/log', `${new Date().getFullYear()}.${new Date().getMonth()+1}.${new Date().getDate()}-${level}`), JSON.stringify(data), {flag: "a"}, () => {})
+        const logFilePath = path.resolve(process.cwd(), 'log');
+        const logFileName = `${new Date().getFullYear()}.${new Date().getMonth()+1}.${new Date().getDate()}-${level}.log`;
+
+        if(!existsSync(logFilePath)) mkdirSync(logFilePath, { recursive: true });
+        writeFile(path.resolve(logFilePath, logFileName), JSON.stringify(data)+'\n', {flag: "a"}, () => {})
 
         return data
     }
@@ -141,8 +145,6 @@ export class Logger {
     debug(
         message: string, 
         context?: Record<string, unknown>, 
-        url?: string, 
-        serviceInCharge?: string
     ) {
         if (!this.shouldLog(LogLevel.DEBUG)) return;
 
@@ -168,8 +170,6 @@ export class Logger {
     info(
         message: string, 
         context?: Record<string, unknown>, 
-        url?: string, 
-        serviceInCharge?: string
     ) {
         if (!this.shouldLog(LogLevel.INFO)) return;
 
@@ -195,8 +195,6 @@ export class Logger {
     warn(
         message: string, 
         context?: Record<string, unknown>, 
-        url?: string, 
-        serviceInCharge?: string
     ) {
         if (!this.shouldLog(LogLevel.WARN)) return;
 
@@ -224,8 +222,6 @@ export class Logger {
     error(
         message: string, 
         context?: Record<string, unknown>, 
-        url?: string, 
-        serviceInCharge?: string
     ) {
         if (!this.shouldLog(LogLevel.ERROR)) return;
 

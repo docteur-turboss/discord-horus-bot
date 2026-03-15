@@ -1,6 +1,6 @@
-import { REST, Routes } from "discord.js";
-import { commands } from "commands";
 import { env } from "config/env";
+import { commands } from "commands";
+import { REST, Routes } from "discord.js";
 import { logger } from "utils/logger/logger";
 
 const { CLIENT_ID, BOT_TOKEN } = env;

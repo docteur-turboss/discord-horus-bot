@@ -16,7 +16,7 @@ const envSchema = z.object({
     .enum(["development", "test", "staging", "production"])
     .default("development"),
 
-  ERROR_URL_WEBHOOK: z.url(),
+  ERROR_URL_WEBHOOK: z.url().optional(),
 
   BOT_TOKEN: z.string().min(1, "BOT_TOKEN is required"),
   CLIENT_ID: z.string().min(1, "CLIENT_ID is required"),
@@ -36,9 +36,8 @@ const envSchema = z.object({
 const parsedEnv = envSchema.safeParse(process.env);
 
 if (!parsedEnv.success) {
-  console.error("❌ Invalid environment configuration", {
-    errors: z.treeifyError(parsedEnv.error),
-  });
+  console.error("❌ Invalid environment configuration\n");
+  console.error(z.prettifyError(parsedEnv.error));
   process.exit(1);
 }
 

@@ -1,9 +1,10 @@
-import fs from "fs";
+import fs, { lstatSync } from "fs";
 import path from "path";
 import { logger } from "utils/logger/logger";
 import { Collection, RESTPostAPIChatInputApplicationCommandsJSONBody } from "discord.js";
 
 class Commands {
+  /* eslint-disable-next-line */
   private commands: Collection<string, any>;
   private cooldowns: Collection<string, Collection<string, number>>;
   private commandsData: RESTPostAPIChatInputApplicationCommandsJSONBody[];
@@ -20,11 +21,14 @@ class Commands {
     if(!this.commands) this.commands = new Collection();
     const commandFolders = fs.readdirSync(path.join(__dirname));
     for (const folder of commandFolders) {
+      if(!lstatSync(path.join(__dirname, folder)).isDirectory()) continue;
+
       const commandFiles = fs
         .readdirSync(path.join(__dirname, folder))
         .filter((file) => file.endsWith(".ts") || file.endsWith(".js"));
 
       for (const file of commandFiles) {
+      /* eslint-disable-next-line */
         const command = require(path.join(__dirname, folder, file));
 
         if(!command.data || !command.main) {

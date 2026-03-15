@@ -3,7 +3,10 @@ import { logger } from "utils/logger/logger";
 
 export const data = new SlashCommandBuilder()
 .setName("ping")
-.setDescription("Replies the bot ping.");
+.setDescription("Replies the bot ping.")
+.setDescriptionLocalizations({
+  fr: "Répond avec le ping du bot.",
+});
 
 export const cooldown = 5;
 

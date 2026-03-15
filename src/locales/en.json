@@ -3,16 +3,18 @@
   "errors.no_command_found": "How the hell did you even get this error?",
   "errors.no_permission_ban": "You don't have permission to ban members.",
   "errors.bot_no_permission_ban": "I don't have permission to ban members.",
-  "errors.self_ban": "You can't ban yourself.",
-  "errors.owner_ban": "You can't ban the server owner.",
+  "errors.self_action": "You can't use this action on yourself.",
+  "errors.owner_action": "You can't use this action on the server owner.",
   "errors.user_not_found": "User not found in this server.",
   "errors.not_bannable": "I cannot ban this user. They may have higher permissions.",
+  "errors.role_hierarchy": "You cannot ban a user with a higher role than you.",
   "errors.command_execution": "There was an error while executing this command!",
   "errors.invalid_user_id": "The provided user ID is invalid.",
   "errors.no_permission_unban": "You don't have permission to unban members.",
   "errors.bot_no_permission_unban": "I don't have permission to unban members.",
   "errors.user_not_banned": "This user is not banned.",
   "errors.not_command_author": "Only the command author can use these buttons.",
+  "errors.already_banned": "This user is already banned.",
 
   "cooldown.active": "Please wait, you are on a cooldown for `{command}`. You can use it again {time}.",
 
@@ -23,6 +25,8 @@
   "moderation.unban_confirm": "Are you sure you want to unban **{user}**?",
   "moderation.action_cancelled": "Your action is cancelled. Have a good day !",
   "moderation.no_reason": "No reason provided",
+  "moderation.action_expired": "Your action has expired. Have a good day !",
+  "moderation.ban_dm": "You have been banned from **{guild}** by **{moderator}** for the following reason: {reason}",  
   "moderation.unban_success": "🔓 {user} has been unbanned.",
-  "moderation.ban_success": "✅ {user} has been banned.\nReason: {reason}"
+  "moderation.ban_success": "{user} has been banned.\nReason: {reason}"
 }

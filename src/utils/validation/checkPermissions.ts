@@ -1,4 +1,15 @@
-import { GuildMember, PermissionFlagsBits } from "discord.js";
+import { ChatInputCommandInteraction, GuildMember, PermissionFlagsBits } from "discord.js";
+
+export type Permissions = "ban" | "kick" | "mute" | "manageRoles" | "manageChannels";
+
+// Mapping Permissions → PermissionFlagsBits + error keys for user and bot
+const PERMISSION_MAP: Record<Permissions, { flag: bigint; userError: string; botError: string }> = {
+  ban: { flag: PermissionFlagsBits.BanMembers, userError: "errors.no_permission_ban", botError: "errors.bot_no_permission_ban" },
+  kick: { flag: PermissionFlagsBits.KickMembers, userError: "errors.no_permission_kick", botError: "errors.bot_no_permission_kick" },
+  mute: { flag: PermissionFlagsBits.ModerateMembers, userError: "errors.no_permission_mute", botError: "errors.bot_no_permission_mute" },
+  manageRoles: { flag: PermissionFlagsBits.ManageRoles, userError: "errors.no_permission_manage_roles", botError: "errors.bot_no_permission_manage_roles" },
+  manageChannels: { flag: PermissionFlagsBits.ManageChannels, userError: "errors.no_permission_manage_channels", botError: "errors.bot_no_permission_manage_channels" },
+};
 
 /**
  * Checks if a member has the necessary permissions for moderation actions.
@@ -7,26 +18,21 @@ import { GuildMember, PermissionFlagsBits } from "discord.js";
  * @returns An object with boolean values for each action.
  */
 export const checkPermissions = (
-  member: GuildMember,
-  botMember: GuildMember
+  interaction: ChatInputCommandInteraction,
+  permissions: Permissions | Permissions[]
 ) => {
-  return {
-    canBan: member.permissions.has(PermissionFlagsBits.BanMembers),
-    botCanBan: botMember.permissions.has(PermissionFlagsBits.BanMembers),
+  const member = interaction.member as GuildMember;
+  const botMember = interaction.guild?.members.me as GuildMember;
 
-    canKick: member.permissions.has(PermissionFlagsBits.KickMembers),
-    botCanKick: botMember.permissions.has(PermissionFlagsBits.KickMembers),
+  if (!member || !botMember) return "errors.command_execution";
 
-    canMute: member.permissions.has(PermissionFlagsBits.ModerateMembers),
-    botCanMute: botMember.permissions.has(PermissionFlagsBits.ModerateMembers),
+  const perms = Array.isArray(permissions) ? permissions : [permissions];
+  for (const perm of perms) {
+    const { flag, userError, botError } = PERMISSION_MAP[perm];
 
-    canManageRoles: member.permissions.has(PermissionFlagsBits.ManageRoles),
-    botCanManageRoles: botMember.permissions.has(PermissionFlagsBits.ManageRoles),
+    if (!member.permissions.has(flag)) return userError;
+    if (!botMember.permissions.has(flag)) return botError;
+  }
 
-    canManageChannels: member.permissions.has(PermissionFlagsBits.ManageChannels),
-    botCanManageChannels: botMember.permissions.has(PermissionFlagsBits.ManageChannels),
-
-    isAdmin: member.permissions.has(PermissionFlagsBits.Administrator),
-    botIsAdmin: botMember.permissions.has(PermissionFlagsBits.Administrator),
-  };
+  return null;
 };

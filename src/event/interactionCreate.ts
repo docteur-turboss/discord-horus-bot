@@ -1,7 +1,7 @@
-import { commands } from "commands";
-import { ChatInputCommandInteraction, Events, MessageFlags } from "discord.js";
-import { followUpError, replyError } from "utils/discord/reply";
+import { ChatInputCommandInteraction, Events } from "discord.js";
+import { followUp, reply } from "utils/discord/reply";
 import { logger } from "utils/logger/logger";
+import { commands } from "commands";
 
 export const data = {
   event: Events.InteractionCreate,
@@ -14,9 +14,10 @@ export const main = async (interaction: ChatInputCommandInteraction) => {
 
 	if (!command) {
 		logger.error(`No command matching ${interaction.commandName} was found.`);
-		return await replyError(interaction, { 
+		return await reply(interaction, { 
 			key: "errors.no_command_found", 
-			ephemeral: true
+			ephemeral: true,
+			type: "error",
 		});
 	}
 
@@ -24,30 +25,33 @@ export const main = async (interaction: ChatInputCommandInteraction) => {
 		const expirationTime = timestamps.get(interaction.user.id)??0 + cooldownAmount;
 		if (Date.now() < expirationTime) {
 			const expiredTimestamp = Math.round(expirationTime / 1_000);
-			return await replyError(interaction, {
+			return await reply(interaction, {
 				key: "cooldown.active",
 				ephemeral: true,
 				vars: {
 					command: command.data.name,
 					time: `<t:${expiredTimestamp}:R>`
-				}
+				},
+				type: "error",
 			})
 		}
 	}
 
 	try {
-		await command.execute(interaction);
+		await command.main(interaction);
 	} catch (error) {
 		logger.error("Error executing command " + interaction.commandName, error as Record<string, unknown>);
 
-		if (interaction.replied || interaction.deferred) return await followUpError(interaction, {
+		if (interaction.replied || interaction.deferred) return await followUp(interaction, {
 			key: "errors.command_execution",
+			type: "error",
 			ephemeral: true
 		})
 			
-    await replyError(interaction, {
+    await reply(interaction, {
 			key: "errors.command_execution",
-			ephemeral: true
+			ephemeral: true,
+			type: "error",
 		});
   }
 };

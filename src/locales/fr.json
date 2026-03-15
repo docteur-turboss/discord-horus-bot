@@ -3,26 +3,30 @@
   "errors.no_command_found": "Comment diable t'as pu avoir cette erreur ?",
   "errors.no_permission_ban": "Vous n'avez pas la permission de bannir des membres.",
   "errors.bot_no_permission_ban": "Je n'ai pas la permission de bannir des membres.",
-  "errors.self_ban": "Vous ne pouvez pas vous bannir.",
-  "errors.owner_ban": "Vous ne pouvez pas bannir le propriétaire du serveur.",
+  "errors.self_action": "Vous ne pouvez pas utiliser cette action sur vous-même.",
+  "errors.owner_action": "Vous ne pouvez pas utiliser cette action sur le propriétaire du serveur.",
   "errors.user_not_found": "Utilisateur introuvable sur ce serveur.",
   "errors.not_bannable": "Je ne peux pas bannir cet utilisateur. Il a peut-être des permissions plus élevées.",
+  "errors.role_hierarchy": "Vous ne pouvez pas bannir un utilisateur avec un rôle plus élevé que le vôtre.",
   "errors.command_execution": "Une erreur est survenue lors de l'exécution de cette commande.",
   "errors.invalid_user_id": "L'identifiant utilisateur fourni est invalide.",
   "errors.no_permission_unban": "Vous n'avez pas la permission de débannir des membres.",
   "errors.bot_no_permission_unban": "Je n'ai pas la permission de débannir des membres.",
   "errors.user_not_banned": "Cet utilisateur n'est pas banni.",
   "errors.not_command_author": "Seul l'auteur de la commande peut utiliser ces boutons.",
+  "errors.already_banned": "Cet utilisateur est déjà banni.",
 
   "cooldown.active": "Veuillez patienter, la commande `{command}` est en cooldown. Vous pourrez l'utiliser à nouveau {time}.",
 
   "action.btns.confirm": "Confirmer",
   "action.btns.cancel": "Annuler",
 
-  "moderation.ban_confirm": "⚠️ Êtes-vous sûr de vouloir bannir **{user}** ?",
-  "moderation.unban_confirm": "⚠️ Êtes-vous sûr de vouloir débannir **{user}** ?",
+  "moderation.ban_confirm": "Êtes-vous sûr de vouloir bannir **{user}** ?",
+  "moderation.unban_confirm": "Êtes-vous sûr de vouloir débannir **{user}** ?",
   "moderation.action_cancelled": "Votre action est annulée. Passez une excellente journée !",
   "moderation.no_reason": "Aucune raison fournie",
-  "moderation.ban_success": "✅ {user} a été banni.\nRaison : {reason}",
-  "moderation.unban_success": "🔓 {user} a été débanni."
+  "moderation.action_expired": "Votre action a expiré. Passez une excellente journée !",
+  "moderation.ban_dm": "Vous avez été banni de **{guild}** par **{moderator}** pour la raison suivante: {reason}",
+  "moderation.unban_success": "🔓 {user} a été débanni.",
+  "moderation.ban_success": "{user} a été banni.\nRaison : {reason}"
 }

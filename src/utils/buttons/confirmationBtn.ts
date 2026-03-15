@@ -1,5 +1,5 @@
 import { ActionRowBuilder, ButtonBuilder, ButtonStyle, ChatInputCommandInteraction } from "discord.js";
-import { t } from "utils/locales/i18n";
+import { t } from "../locales/i18n";
 
 export const createConfirmationButtons = (interaction: ChatInputCommandInteraction) =>
   new ActionRowBuilder<ButtonBuilder>().addComponents(

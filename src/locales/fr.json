@@ -24,6 +24,8 @@
   "errors.user_not_banned": "Cet utilisateur n'est pas banni.",
   "errors.not_command_author": "Seul l'auteur de la commande peut utiliser ces boutons.",
   "errors.already_banned": "Cet utilisateur est déjà banni.",
+  "errors.not_moderatable": "Je ne peux pas modérer cet utilisateur. Il a peut-être des permissions plus élevées.",
+  "errors.user_not_muted": "Cet utilisateur n'est pas mute.",
 
   "cooldown.active": "Veuillez patienter, la commande `{command}` est en cooldown. Vous pourrez l'utiliser à nouveau {time}.",
 
@@ -40,5 +42,11 @@
   "moderation.kick_dm": "Vous avez été kick de **{guild}** par **{moderator}** pour la raison suivante: {reason}",
   "moderation.unban_success": "🔓 {user} a été débanni.",
   "moderation.kick_success": "{user} a été kick.",
+  "moderation.mute_confirm": "Êtes-vous sûr de vouloir réduire au silence **{user}** ?",
+  "moderation.mute_success": "{user} a été réduit au silence.",
+  "moderation.mute_dm": "Vous avez été réduit au silence sur **{guild}** par **{moderator}** pour {duration} minutes\n Pour la raison suivante: {reason}",
+  "moderation.unmute_confirm": "Êtes-vous sûr de vouloir rendre la parole à **{user}** ?",
+  "moderation.unmute_success": "{user} a récupéré sa parole.",
+  "moderation.unmute_dm": "Vous avez été démuté sur **{guild}** par **{moderator}**\n Pour la raison suivante: {reason}",
   "moderation.ban_success": "{user} a été banni.\nRaison : {reason}"
 }

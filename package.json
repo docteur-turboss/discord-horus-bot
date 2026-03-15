@@ -22,19 +22,26 @@
     "test": "jest",
     "eslint": "npx eslint src/**/*.{ts,js}",
     "commit": "npx gitmoji -c",
-    "build": "tsc"
+    "dev": "npx ts-node -r tsconfig-paths/register src/app/index.ts",
+    "build": "tsc && tsc-alias",
+    "build:types": "tsc -p tsconfig.types.json",
+    "start": "node dist/app/index.js",
+    "deploy:commands": "npm run build && node dist/app/commandDeploy.js"
   },
   "dependencies": {
     "discord.js": "^14.25.1",
+    "tsconfig-paths": "^4.2.0",
     "zod": "^4.3.6"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
     "@jest/globals": "^30.2.0",
+    "dotenv-cli": "^11.0.0",
     "eslint": "^10.0.2",
     "globals": "^17.4.0",
     "jest": "^30.2.0",
     "ts-jest": "^29.4.6",
+    "tsc-alias": "^1.8.16",
     "typescript": "^5.9.3",
     "typescript-eslint": "^8.56.1"
   }

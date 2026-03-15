@@ -8,7 +8,8 @@ export async function validateRoleHierarchy(
 
   if (
     interaction.member instanceof GuildMember &&
-    interaction.member.roles.highest.position <= targetMember.roles.highest.position
+    interaction.member.roles.highest.position < targetMember.roles.highest.position &&
+    interaction.guild?.ownerId !== interaction.user.id
   ) {
     await reply(interaction, {
       key: "errors.role_hierarchy",

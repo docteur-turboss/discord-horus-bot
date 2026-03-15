@@ -74,6 +74,7 @@ export const main = async (interaction: ChatInputCommandInteraction) => {
     const vars = {
       guild: interaction.guild!.name,
       reason,
+      user: targetUser.tag,
       moderator: interaction.user.tag
     };
 

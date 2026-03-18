@@ -3,10 +3,10 @@ import { validateModerationTarget } from "utils/moderations/validateModerationTa
 import { validateRoleHierarchy } from "utils/moderations/validateRoleHierarchy";
 import { ChatInputCommandInteraction, SlashCommandBuilder } from "discord.js";
 import { ensureGuildInteraction } from "utils/discord/ensureGuildInteraction";
-import { reply, followUp, targetSend } from "utils/discord/reply";
+import { catchErrorInCommand } from "utils/validation/errorDuringCommand";
 import { getMemberSafe } from "utils/discord/getMemberSafe";
 import { confirmAction } from "utils/discord/confirmAction";
-import { logger } from "utils/logger/logger";
+import { reply, targetSend } from "utils/discord/reply";
 import { t } from "utils/locales/i18n";
 
 export const data = new SlashCommandBuilder()
@@ -124,20 +124,5 @@ export const main = async (interaction: ChatInputCommandInteraction) => {
     }
     */
 
-  } catch (err) {
-    logger.error("Error executing kick command:", err as Record<string, unknown>);
-
-    if (!interaction.replied)
-      return await reply(interaction, {
-        key: "errors.command_execution",
-        ephemeral: true,
-        type: "error",
-      });
-
-    return await followUp(interaction, {
-      key: "errors.command_execution",
-      ephemeral: true,
-      type: "error",
-    });
-  }
+  } catch (err) { catchErrorInCommand(err, interaction, "kick") }
 };

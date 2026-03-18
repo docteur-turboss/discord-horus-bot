@@ -2,10 +2,9 @@ import { validateModerationPermissions } from "utils/moderations/validateModerat
 import { validateUserIdOrReply } from "utils/validation/validateUserIdOrReply";
 import { ChatInputCommandInteraction, SlashCommandBuilder } from "discord.js";
 import { ensureGuildInteraction } from "utils/discord/ensureGuildInteraction";
+import { catchErrorInCommand } from "utils/validation/errorDuringCommand";
 import { getBannedUserOrReply } from "utils/moderations/getBannedUser";
 import { confirmAction } from "utils/discord/confirmAction";
-import { followUp, reply } from "utils/discord/reply";
-import { logger } from "utils/logger/logger";
 
 export const data = new SlashCommandBuilder()
 .setName("unban")
@@ -75,19 +74,5 @@ export const main = async (interaction: ChatInputCommandInteraction) => {
       logChannel.send({ embeds: [logEmbed] });
     }
     */
-
-  } catch (err) {
-    logger.error("Error executing unban command:", err as Record<string, unknown>);
-
-    if (!interaction.replied) return await reply(interaction, {
-      key: "errors.command_execution",
-      ephemeral: true,
-    });
-
-    return await followUp(interaction, {
-      key: "errors.command_execution",
-      ephemeral: true,
-      type: "error"
-    });
-  }
+  } catch (err) { catchErrorInCommand(err, interaction, "unban") }
 };

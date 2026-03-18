@@ -1,4 +1,4 @@
-import { ChatInputCommandInteraction, SlashCommandBuilder } from "discord.js";
+import { ChatInputCommandInteraction, InteractionContextType, PermissionFlagsBits, SlashCommandBuilder } from "discord.js";
 import { catchErrorInCommand } from "utils/validation/errorDuringCommand";
 import { BaseCommand } from "utils/commands/baseCommand";
 
@@ -22,7 +22,9 @@ export const data = new SlashCommandBuilder()
     fr: "ID de l'utilisateur à débannir",
   })
   .setRequired(true)
-);
+)
+.setDefaultMemberPermissions(PermissionFlagsBits.BanMembers)
+.setContexts(InteractionContextType.Guild);
 
 export const cooldown = 5;
 

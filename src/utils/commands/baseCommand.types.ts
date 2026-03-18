@@ -4,5 +4,6 @@ export type BaseCommandType =
   | "mute"
   | "unban"
   | "unmute"
+  | "purge-message"
   | "rename-member"
   | "reset-member-nickname";

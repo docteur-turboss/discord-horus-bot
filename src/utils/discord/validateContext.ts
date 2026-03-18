@@ -21,5 +21,7 @@ export const validateContext = async (
       "ManageNicknames",
     ))) ||
   (type === "kick" &&
-    (await NotValidateModerationPermissions(interaction, "KickMembers")));
+    (await NotValidateModerationPermissions(interaction, "KickMembers"))) ||
+  (type === "purge-message" &&
+    (await NotValidateModerationPermissions(interaction, "ManageMessages")));
 }

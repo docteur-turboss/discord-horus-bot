@@ -13,7 +13,7 @@ export const getAllVariables = (interaction: ChatInputCommandInteraction, type: 
       ? interaction.options.getString("user", true).trim()
       : null;
   const nickname =
-    (type === "rename-member" || type === "reset-member-nickname")
+    (type === "rename-member")
       ? interaction.options.getString("nickname", true)
       : null;
   const reason = !(type === "unban")

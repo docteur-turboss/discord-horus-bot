@@ -1,0 +1,30 @@
+{
+  "compilerOptions": {
+    "target": "es2020",
+    "module": "commonjs",
+    "moduleResolution": "node",
+
+    "rootDir": "./src",
+    "outDir": "./dist",
+
+    "baseUrl": "./src",
+
+    "paths": {
+      "event/*": ["event/*"],
+      "utils/*": ["utils/*"],
+      "config/*": ["config/*"],
+      "commands/*": ["commands/*"],
+    },
+    
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    "resolveJsonModule": true
+  },
+  "include": ["src/**/*"],
+  "exclude": ["node_modules", "dist"],
+  "types": ["node"]
+}

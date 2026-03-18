@@ -6,7 +6,7 @@ export type Permissions = keyof typeof PermissionFlagsBits;
 const PERMISSION_MAP: Record<Permissions, { flag: bigint; userError: string; botError: string }> = {
   BanMembers: { flag: PermissionFlagsBits.BanMembers, userError: "errors.no_permission_ban", botError: "errors.bot_no_permission_ban" },
   KickMembers: { flag: PermissionFlagsBits.KickMembers, userError: "errors.no_permission_kick", botError: "errors.bot_no_permission_kick" },
-  ModerateMembers: { flag: PermissionFlagsBits.ModerateMembers, userError: "errors.no_permission_mute", botError: "errors.bot_no_permission_mute" },
+  ModerateMembers: { flag: PermissionFlagsBits.ModerateMembers, userError: "errors.no_permission_timeout", botError: "errors.bot_no_permission_timeout" },
   ManageRoles: { flag: PermissionFlagsBits.ManageRoles, userError: "errors.no_permission_manage_roles", botError: "errors.bot_no_permission_manage_roles" },
   ManageChannels: { flag: PermissionFlagsBits.ManageChannels, userError: "errors.no_permission_manage_channels", botError: "errors.bot_no_permission_manage_channels" },
   ManageNicknames: { flag: PermissionFlagsBits.ManageNicknames, userError: "errors.no_permission_manage_nicknames", botError: "errors.bot_no_permission_manage_nicknames" },
@@ -34,7 +34,7 @@ const PERMISSION_MAP: Record<Permissions, { flag: bigint; userError: string; bot
   ManageWebhooks: { flag: PermissionFlagsBits.ManageWebhooks, userError: "errors.no_permission_manage_webhooks", botError: "errors.bot_no_permission_manage_webhooks" },
   MentionEveryone: { flag: PermissionFlagsBits.MentionEveryone, userError: "errors.no_permission_mention_everyone", botError: "errors.bot_no_permission_mention_everyone" },
   MoveMembers: { flag: PermissionFlagsBits.MoveMembers, userError: "errors.no_permission_move_members", botError: "errors.bot_no_permission_move_members" },
-  MuteMembers: { flag: PermissionFlagsBits.MuteMembers, userError: "errors.no_permission_mute_members", botError: "errors.bot_no_permission_mute_members" },
+  MuteMembers: { flag: PermissionFlagsBits.MuteMembers, userError: "errors.no_permission_mute_voice", botError: "errors.bot_no_permission_mute_voice" },
   PinMessages: { flag: PermissionFlagsBits.PinMessages, userError: "errors.no_permission_pin_messages", botError: "errors.bot_no_permission_pin_messages" },
   PrioritySpeaker: { flag: PermissionFlagsBits.PrioritySpeaker, userError: "errors.no_permission_priority_speaker", botError: "errors.bot_no_permission_priority_speaker" },
   ReadMessageHistory: { flag: PermissionFlagsBits.ReadMessageHistory, userError: "errors.no_permission_read_message_history", botError: "errors.bot_no_permission_read_message_history" },

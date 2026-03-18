@@ -1,4 +1,4 @@
-import { ChatInputCommandInteraction, GuildMember, User } from "discord.js";
+import { BaseGuildTextChannel, ChatInputCommandInteraction, Collection, GuildMember, Message, User } from "discord.js";
 import { isUserBannedOrReply } from "utils/moderations/getBannedUser";
 import { BaseCommandType } from "utils/commands/baseCommand.types";
 import { TranslationKey } from "utils/locales/i18n.types";
@@ -8,14 +8,18 @@ export const setupAllReponseContext = (
   type: BaseCommandType,  
   targetMember: GuildMember | null, 
   targetUser: User | null, 
+  targetChannel: BaseGuildTextChannel | null,
   vars : {
     guild: string;
-    reason: any;
+    reason: string;
     user: string;
     nickname: string;
     moderator: string;
     duration: string;
     timeoutMs: number | null;
+    channel: string | undefined;
+    amount: number | null;
+    deletableMessages: false | Collection<string, Message<boolean>>;
     userId: string | null;
 }) => {
   let confirmKey: TranslationKey,
@@ -31,6 +35,13 @@ export const setupAllReponseContext = (
       key = "moderation.unmute_dm";
       confirmFunc = async () => await targetMember?.timeout(null, vars.reason);
 
+      break;
+    case "purge-message":
+      confirmKey = "moderation.purge_confirm";
+      successKey = "moderation.purge_success";
+      key = "cooldown.active";
+      confirmFunc = async () => await targetChannel?.bulkDelete(vars.deletableMessages||0);
+      
       break;
     case "rename-member":
       confirmKey = "moderation.rename_confirm";

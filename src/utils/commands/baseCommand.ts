@@ -1,15 +1,17 @@
 import { targetSend } from "utils/discord/reply";
 import { BaseCommandType } from "./baseCommand.types";
-import { ChatInputCommandInteraction } from "discord.js";
 import { confirmAction } from "utils/discord/confirmAction";
 import { validateContext } from "utils/discord/validateContext";
 import { getMemberSafeOrReply } from "utils/discord/getMemberSafe";
 import { getAllVariables } from "utils/validation/getAllVariables";
+import { getChannelSafeOrReply } from "utils/discord/getChannelSafe";
 import { GlobalValidation } from "utils/validation/globalValidation";
 import { getBannedUserOrReply } from "utils/moderations/getBannedUser";
+import { BaseGuildTextChannel, ChatInputCommandInteraction } from "discord.js";
 import { setupAllReponseContext } from "utils/validation/setupAllReponseContext";
 import { NotValidateUserIdOrReply } from "utils/validation/validateUserIdOrReply";
 import { NotValidateTimestampOrReply } from "utils/validation/validateTimestampOrReply";
+import { NotValidatBulkDeleteMessageOrReply } from "utils/validation/validateBulkDeleteMessageOrReply";
 
 export const BaseCommand = async (
   interaction: ChatInputCommandInteraction,
@@ -18,6 +20,8 @@ export const BaseCommand = async (
   if (await validateContext(interaction, type)) return;
 
   const {
+    targetChannel,
+    amountMessage,
     targetUser, 
     duration, 
     nickname, 
@@ -29,12 +33,18 @@ export const BaseCommand = async (
 
   const bannedUser = await getBannedUserOrReply(interaction, userId ?? "");
   const targetMember = await getMemberSafeOrReply(interaction, targetUser?.id);
-  if (!targetMember && !bannedUser) return;
+  const targetGuildChannel = await getChannelSafeOrReply(interaction, targetChannel?.id);
+  if (!targetMember && !bannedUser && !targetGuildChannel) return;
 
-  if(await GlobalValidation(interaction, targetMember, targetUser, type)) return;
+  if(await GlobalValidation(interaction, targetMember, targetUser, targetGuildChannel, type)) return;
 
+  const messages = type === "purge-message" && await (targetGuildChannel as BaseGuildTextChannel)?.messages.fetch({ limit: amountMessage??0 });
+  const deletableMessages = messages && messages.filter(
+    (msg) => Date.now() - msg.createdTimestamp <= 14 * 24 * 60 * 60 * 1000
+  );
+  if(messages && deletableMessages && (await NotValidatBulkDeleteMessageOrReply(interaction, deletableMessages))) return;
+    
   const timeoutMs = !duration ? null : duration * 60 * 1000;
-
   if (timeoutMs && (await NotValidateTimestampOrReply(interaction, timeoutMs)))
     return;
 
@@ -47,6 +57,9 @@ export const BaseCommand = async (
     moderator: interaction.user.displayName,
     duration: duration ? duration.toString() : "",
     timeoutMs,
+    channel: targetGuildChannel?.name,
+    amount: amountMessage,
+    deletableMessages,
     userId
   };
 
@@ -56,7 +69,7 @@ export const BaseCommand = async (
     successKey,
     confirmKey,
     key,
-  } = setupAllReponseContext(interaction, type, targetMember, targetUser, vars);
+  } = setupAllReponseContext(interaction, type, targetMember, targetUser, targetGuildChannel as BaseGuildTextChannel, vars);
 
   await confirmAction(interaction, {
     confirmKey,
@@ -66,7 +79,7 @@ export const BaseCommand = async (
     onConfirm: async () => {
       if (beforeConfirmFunc) await beforeConfirmFunc();
 
-      if (type !== "unban" && targetMember)
+      if (type !== "unban" && type !== "purge-message" && targetMember)
         await targetSend(targetMember, interaction, {
           key,
           vars,

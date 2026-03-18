@@ -3,7 +3,7 @@ import { ChatInputCommandInteraction } from "discord.js";
 import { t } from "utils/locales/i18n";
 
 export const getAllVariables = (interaction: ChatInputCommandInteraction, type: BaseCommandType) => {
-  const targetUser = !(type === "unban")
+  const targetUser = !(type === "unban" || type === "purge-message")
     ? interaction.options.getUser("user", true)
     : null;
   const duration =
@@ -20,6 +20,10 @@ export const getAllVariables = (interaction: ChatInputCommandInteraction, type: 
     ? interaction.options.getString("reason") ||
       t(interaction, "moderation.no_reason")
     : "";
-
-  return {targetUser, duration, userId, nickname, reason}
+  const amountMessage = type === "purge-message"
+    ? interaction.options.getInteger("amount", true) : null;
+  const targetChannel = type === "purge-message"
+    ? interaction.options.getChannel("channel") ?? interaction.channel : null;
+  
+  return {targetUser, duration, userId, nickname, reason, amountMessage, targetChannel}
 }

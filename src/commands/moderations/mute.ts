@@ -1,4 +1,4 @@
-import { ChatInputCommandInteraction, SlashCommandBuilder } from "discord.js";
+import { ChatInputCommandInteraction, InteractionContextType, PermissionFlagsBits, SlashCommandBuilder } from "discord.js";
 import { catchErrorInCommand } from "utils/validation/errorDuringCommand";
 import { BaseCommand } from "utils/commands/baseCommand";
 
@@ -33,6 +33,8 @@ export const data = new SlashCommandBuilder()
   .setDescriptionLocalizations({
     fr: "Durée en minutes",
   })
+  .setMinValue(1)
+  .setMaxValue(40321)
   .setRequired(true)
 )
 .addStringOption((option) =>
@@ -46,7 +48,9 @@ export const data = new SlashCommandBuilder()
     fr: "Raison du mute",
   })
   .setRequired(false)
-);
+)
+.setDefaultMemberPermissions(PermissionFlagsBits.ModerateMembers)
+.setContexts(InteractionContextType.Guild);
 
 export const cooldown = 5;
 

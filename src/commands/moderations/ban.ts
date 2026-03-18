@@ -1,6 +1,6 @@
-import { ChatInputCommandInteraction, SlashCommandBuilder } from "discord.js";
-import { BaseCommand } from "utils/commands/baseCommand";
+import { ChatInputCommandInteraction, InteractionContextType, PermissionFlagsBits, SlashCommandBuilder } from "discord.js";
 import { catchErrorInCommand } from "utils/validation/errorDuringCommand";
+import { BaseCommand } from "utils/commands/baseCommand";
 
 export const data = new SlashCommandBuilder()
 .setName("ban")
@@ -34,7 +34,9 @@ export const data = new SlashCommandBuilder()
     fr: "Raison du bannissement",
   })
   .setRequired(false)
-);
+)
+.setDefaultMemberPermissions(PermissionFlagsBits.BanMembers)
+.setContexts(InteractionContextType.Guild);
 
 export const cooldown = 5;
 

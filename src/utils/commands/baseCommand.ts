@@ -28,7 +28,8 @@ type BaseCommandType =
   | "mute"
   | "unban"
   | "unmute"
-  | "rename-member";
+  | "rename-member"
+  | "reset-member-nickname";
 
 export const BaseCommand = async (
   interaction: ChatInputCommandInteraction,
@@ -43,7 +44,7 @@ export const BaseCommand = async (
       ))) ||
     ((type === "unban" || type === "ban") &&
       (await NotValidateModerationPermissions(interaction, "BanMembers"))) ||
-    (type === "rename-member" &&
+    ((type === "rename-member" || type === "reset-member-nickname") &&
       (await NotValidateModerationPermissions(
         interaction,
         "ManageNicknames",
@@ -63,7 +64,7 @@ export const BaseCommand = async (
       ? interaction.options.getString("user", true).trim()
       : null;
   const nickname =
-    type === "rename-member"
+    (type === "rename-member" || type === "reset-member-nickname")
       ? interaction.options.getString("nickname", true)
       : null;
   const reason = !(type === "unban")
@@ -91,7 +92,7 @@ export const BaseCommand = async (
           interaction,
           targetMember,
         ))) ||
-      (type === "rename-member" &&
+      ((type === "rename-member" || type === "reset-member-nickname") &&
         (await NotValidateModerationManageable(interaction, targetMember))) ||
       (type === "kick" &&
         (await NotValidateModerationKickable(interaction, targetMember))) ||
@@ -144,6 +145,13 @@ export const BaseCommand = async (
       key = "moderation.rename_applied";
       confirmFunc = async () => await targetMember?.setNickname(nickname);
 
+      break;
+    case "reset-member-nickname":
+      confirmKey = "moderation.reset_nickname_confirm";
+      successKey = "moderation.reset_nickname_success";
+      key = "moderation.reset_nickname_applied";
+      confirmFunc = async () => await targetMember?.setNickname(null);
+      
       break;
     case "mute":
       confirmKey = "moderation.mute_confirm";

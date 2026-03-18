@@ -36,6 +36,30 @@ export const setupAllReponseContext = (
       confirmFunc = async () => await targetMember?.timeout(null, vars.reason);
 
       break;
+    case "lock-channel":
+      confirmKey = "moderation.lock_confirm";
+      successKey = "moderation.lock_success";
+      key = "cooldown.active";
+      confirmFunc = async () => await targetChannel?.permissionOverwrites.edit(targetChannel.guild.roles.everyone, {
+        SendMessages: false,
+      }) && 
+      await targetChannel?.setName(`🔒-${targetChannel?.name.replace(/^[^\w]+-/, "")}`);
+      
+      break;
+    case "unlock-channel":
+      confirmKey = "moderation.unlock_confirm";
+      successKey = "moderation.unlock_success";
+      key = "cooldown.active";
+      confirmFunc = async () => await targetChannel?.permissionOverwrites.edit(targetChannel.guild.roles.everyone, {
+        SendMessages: null,
+      }) && 
+      await targetChannel?.setName(
+        targetChannel?.name
+        .replace(new RegExp(`^🔒-?`), "")
+        .replace(/^[^\w]+-/, "")
+      );
+      
+      break;
     case "purge-message":
       confirmKey = "moderation.purge_confirm";
       successKey = "moderation.purge_success";

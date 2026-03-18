@@ -48,7 +48,7 @@ export const cooldown = 5;
 export const main = async (interaction: ChatInputCommandInteraction) => {
   try {
     if (!(await ensureGuildInteraction(interaction))) return;
-    if (!(await validateModerationPermissions(interaction, "kick"))) return;
+    if (!(await validateModerationPermissions(interaction, "KickMembers"))) return;
 
     const targetUser = interaction.options.getUser("user", true);
 

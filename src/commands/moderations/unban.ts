@@ -37,7 +37,7 @@ export const main = async (interaction: ChatInputCommandInteraction) => {
 
     const userId = interaction.options.getString("user", true).trim();
 
-    if(!(await validateModerationPermissions(interaction, "ban"))) return;
+    if(!(await validateModerationPermissions(interaction, "BanMembers"))) return;
     if(!(await validateUserIdOrReply(interaction, userId))) return;
 
     const bannedUser = await getBannedUserOrReply(interaction, userId);

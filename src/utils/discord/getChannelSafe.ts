@@ -3,10 +3,10 @@ import { reply } from "./reply";
 
 export async function getChannelSafeOrReply(
   interaction: ChatInputCommandInteraction,
-  userId?: string
+  channelId?: string
 ): Promise<GuildBasedChannel | null> {
-  if(!userId) return null;
-  const channel = await interaction.guild?.channels.fetch(userId).catch(() => null);
+  if(!channelId) return null;
+  const channel = await interaction.guild?.channels.fetch(channelId).catch(() => null);
 
   if(!channel) {
     reply(interaction, {

@@ -1,15 +1,16 @@
 import { ChatInputCommandInteraction } from "discord.js";
-import { validateUserId } from "./validUserId";
 import { reply } from "utils/discord/reply";
 
-export async function NotValidateUserIdOrReply(
+export async function NotValidateTimestampOrReply(
   interaction: ChatInputCommandInteraction,
-  userId: string
+  timestamp: number
 ) {
-  if(validateUserId(userId)) return false;
-  
+  const MAX_TIMEOUT = 28 * 24 * 60 * 60 * 1000;
+
+  if (!timestamp || timestamp < MAX_TIMEOUT) return false
+
   reply(interaction, {
-    key: "errors.invalid_user_id",
+    key: "errors.invalid_timestamp",
     ephemeral: true,
     type: "error",
   });

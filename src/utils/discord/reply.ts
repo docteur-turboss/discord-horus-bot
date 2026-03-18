@@ -26,16 +26,16 @@ type ReplyOptions<K extends TranslationKey = TranslationKey> = {
 type EmbedType = "success" | "error" | "info" | "warning";
 type Interaction = ChatInputCommandInteraction | ButtonInteraction;
 
-const buildEmbed = (type: EmbedType, description: string) => {
+const buildEmbed = (type: EmbedType, description: string, lang: string) => {
   switch (type) {
     case "error":
-      return errorEmbed({ description });
+      return errorEmbed({ description, lang });
     case "info":
-      return infoEmbed({ description });
+      return infoEmbed({ description, lang });
     case "warning":
-      return warningEmbed({ description });
+      return warningEmbed({ description, lang });
     default:
-      return successEmbed({ description });
+      return successEmbed({ description, lang });
   }
 };
 
@@ -43,45 +43,22 @@ export const reply = async <K extends TranslationKey>(
   interaction: Interaction,
   options: ReplyOptions<K>
 ) => {
-  const description = t(interaction, options.key, options.vars);
-  const embed = buildEmbed(options.type ?? "success", description);
-
-  const opt = {
-    embeds: [embed],
-    components: options.components ?? [],
-    ...(options.ephemeral && { ephemeral: options.ephemeral }),
-    ...(options.withResponse && { withResponse: options.withResponse }),
-  };
-
-  return interaction.reply(opt);
+  return interaction.reply(constructOpt(interaction, options).opt);
 };
 
 export const followUp = async <K extends TranslationKey>(
   interaction: Interaction,
   options: ReplyOptions<K>
 ) => {
-  const description = t(interaction, options.key, options.vars);
-  const embed = buildEmbed(options.type ?? "success", description);
-
-  const opt = {
-    embeds: [embed],
-    components: options.components ?? [],
-    ...(options.ephemeral && { ephemeral: options.ephemeral }),
-    ...(options.withResponse && { withResponse: options.withResponse }),
-  };
-
-  return interaction.followUp(opt);
+  return interaction.followUp(constructOpt(interaction, options).opt);
 };
 
 export const editReply = async <K extends TranslationKey>(
   interaction: Interaction,
   options: ReplyOptions<K>
 ) => {
-  const description = t(interaction, options.key, options.vars);
-  const embed = buildEmbed(options.type ?? "success", description);
-
   return interaction.editReply({
-    embeds: [embed],
+    embeds: [constructOpt(interaction, options).embed],
     components: options.components ?? [],
   });
 };
@@ -89,15 +66,29 @@ export const editReply = async <K extends TranslationKey>(
 export const targetSend = async <K extends TranslationKey>(
   user: GuildMember,
   interaction: Interaction,
-  options: Omit<ReplyOptions<K>, "ephemeral" | "withResponse">
+  options: ReplyOptions<K>
 ) => {
-  const description = t(interaction, options.key, options.vars);
-  const embed = buildEmbed(options.type ?? "success", description);
-
   return user.send({
-    embeds: [embed],
+    embeds: [constructOpt(interaction, options).embed],
     components: options.components ?? [],
   }).catch(() => {
     logger.warn(`Could not send DM to ${user.user.tag} (${user.id})`);
   });
 };
+
+const constructOpt = <K extends TranslationKey> (
+  interaction: Interaction,
+  options: ReplyOptions<K>
+) => {
+
+  const lang = interaction.locale.split("-")[0]
+  const description = t(interaction, options.key, options.vars);
+  const embed = buildEmbed(options.type ?? "success", description, lang);
+
+  return {embed, opt : {
+    embeds: [embed],
+    components: options.components ?? [],
+    ...(options.ephemeral && { ephemeral: options.ephemeral }),
+    ...(options.withResponse && { withResponse: options.withResponse }),
+  }}
+}

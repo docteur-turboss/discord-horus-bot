@@ -4,6 +4,12 @@ export default {
 
   "cooldown.active": "Veuillez patienter, la commande `{command}` est en cooldown. Vous pourrez l'utiliser à nouveau {time}.",
 
+  "embeds.error": "❌ Erreur",
+  "embeds.footer": "Fait avec ❤️ par Horus",
+  "embeds.info": "ℹ️ Information",
+  "embeds.success": "✅ Succès",
+  "embeds.warning": "⚠️ Attention",
+
   "errors.already_banned": "Cet utilisateur est déjà banni.",
   "errors.bot_no_permission_add_reactions": "Je n'ai pas la permission d'ajouter des réactions.",
   "errors.bot_no_permission_administrator": "J'ai besoin de la permission administrateur.",

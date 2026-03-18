@@ -4,6 +4,12 @@ export default {
 
   "cooldown.active": "Please wait, you are on a cooldown for `{command}`. You can use it again {time}.",
 
+  "embeds.error": "❌ Error",
+  "embeds.footer": "Made with ❤️ by Horus",
+  "embeds.info": "ℹ️ Information",
+  "embeds.success": "✅ Success",
+  "embeds.warning": "⚠️ Warning",
+
   "errors.already_banned": "This user is already banned.",
   "errors.bot_no_permission_add_reactions": "I don't have permission to add reactions.",
   "errors.bot_no_permission_administrator": "I need administrator permissions.",

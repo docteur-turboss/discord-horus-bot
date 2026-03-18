@@ -1,13 +1,6 @@
-import { validateModerationPermissions } from "utils/moderations/validateModerationPermissions";
-import { validateModerationTarget } from "utils/moderations/validateModerationTarget";
-import { validateRoleHierarchy } from "utils/moderations/validateRoleHierarchy";
 import { ChatInputCommandInteraction, SlashCommandBuilder } from "discord.js";
-import { ensureGuildInteraction } from "utils/discord/ensureGuildInteraction";
 import { catchErrorInCommand } from "utils/validation/errorDuringCommand";
-import { getMemberSafe } from "utils/discord/getMemberSafe";
-import { confirmAction } from "utils/discord/confirmAction";
-import { reply, targetSend } from "utils/discord/reply";
-import { t } from "utils/locales/i18n";
+import { BaseCommand } from "utils/commands/baseCommand";
 
 export const data = new SlashCommandBuilder()
 .setName("kick")
@@ -47,57 +40,7 @@ export const cooldown = 5;
 
 export const main = async (interaction: ChatInputCommandInteraction) => {
   try {
-    if (!(await ensureGuildInteraction(interaction))) return;
-    if (!(await validateModerationPermissions(interaction, "KickMembers"))) return;
-
-    const targetUser = interaction.options.getUser("user", true);
-
-    const reason =
-      interaction.options.getString("reason") ||
-      t(interaction, "moderation.no_reason");
-
-    if (!(await validateModerationTarget(interaction, targetUser.id))) return;
-
-    const targetMember = await getMemberSafe(interaction.guild!, targetUser.id);
-
-    if (!targetMember)
-      return await reply(interaction, {
-        key: "errors.user_not_found",
-        ephemeral: true,
-        type: "error",
-      });
-
-    if (!(await validateRoleHierarchy(interaction, targetMember))) return;
-
-    if (!targetMember.kickable)
-      return await reply(interaction, {
-        key: "errors.not_kickable",
-        ephemeral: true,
-        type: "error",
-      });
-
-    const vars = {
-      guild: interaction.guild!.name,
-      reason,
-      user: targetUser.tag,
-      moderator: interaction.user.tag,
-    };
-
-    await confirmAction(interaction, {
-      confirmKey: "moderation.kick_confirm",
-      successKey: "moderation.kick_success",
-      vars,
-
-      onConfirm: async () => {
-        await targetSend(targetMember, interaction, {
-          key: "moderation.kick_dm",
-          vars,
-          type: "info",
-        }).catch(() => null);
-
-        await targetMember.kick(reason);
-      },
-    });
+    BaseCommand(interaction, "kick");
 
     /*
     ========================================

@@ -1,14 +1,6 @@
-import { validateModerationPermissions } from "utils/moderations/validateModerationPermissions";
-import { validateModerationTarget } from "utils/moderations/validateModerationTarget";
-import { validateRoleHierarchy } from "utils/moderations/validateRoleHierarchy";
 import { ChatInputCommandInteraction, SlashCommandBuilder } from "discord.js";
-import { ensureGuildInteraction } from "utils/discord/ensureGuildInteraction";
+import { BaseCommand } from "utils/commands/baseCommand";
 import { catchErrorInCommand } from "utils/validation/errorDuringCommand";
-import { isUserBanned } from "utils/moderations/getBannedUser";
-import { getMemberSafe } from "utils/discord/getMemberSafe";
-import { confirmAction } from "utils/discord/confirmAction";
-import { reply, targetSend } from "utils/discord/reply";
-import { t } from "utils/locales/i18n";
 
 export const data = new SlashCommandBuilder()
 .setName("ban")
@@ -48,60 +40,8 @@ export const cooldown = 5;
 
 export const main = async (interaction: ChatInputCommandInteraction) => {
   try {
-    if(!(await ensureGuildInteraction(interaction))) return;
-    if(!(await validateModerationPermissions(interaction, "BanMembers"))) return;
-
-    const targetUser = interaction.options.getUser("user", true);
-    const reason =
-      interaction.options.getString("reason") || t(interaction, "moderation.no_reason");
+    BaseCommand(interaction, "ban");
     
-    if(!(await validateModerationTarget(interaction, targetUser.id))) return;
-
-    const targetMember = await getMemberSafe(interaction.guild!, targetUser.id);      
-    if (!targetMember) return await reply(interaction, {
-      key: "errors.user_not_found",
-      ephemeral: true,
-      type: "error"
-    })
-      
-    if(!(await validateRoleHierarchy(interaction, targetMember))) return;
-    if (!targetMember.bannable) return await reply(interaction, {
-      key: "errors.not_bannable",
-      ephemeral: true,
-      type: "error"
-    })
-      
-    const vars = {
-      guild: interaction.guild!.name,
-      reason,
-      user: targetUser.tag,
-      moderator: interaction.user.tag
-    };
-
-    await confirmAction(interaction, {
-      confirmKey: "moderation.ban_confirm",
-      successKey: "moderation.ban_success",
-      vars,
-
-      onConfirm: async () => {
-        if (await isUserBanned(interaction.guild!, targetUser.id)) {
-          throw reply(interaction, {
-            key: "errors.already_banned",
-            ephemeral: true,
-            type: "error"
-          });
-        }
-
-        await targetSend(targetMember, interaction, ({
-          key: "moderation.ban_dm",
-          vars,
-          type: "info"
-        })).catch(() => null);
-
-        await targetMember.ban({ reason });
-      },
-    });
-
     /*
     ========================================
     FUTURE MODERATION LOG SYSTEM

@@ -1,13 +1,6 @@
-import { validateModerationPermissions } from "utils/moderations/validateModerationPermissions";
-import { validateModerationTarget } from "utils/moderations/validateModerationTarget";
-import { validateRoleHierarchy } from "utils/moderations/validateRoleHierarchy";
 import { ChatInputCommandInteraction, SlashCommandBuilder } from "discord.js";
-import { ensureGuildInteraction } from "utils/discord/ensureGuildInteraction";
 import { catchErrorInCommand } from "utils/validation/errorDuringCommand";
-import { getMemberSafe } from "utils/discord/getMemberSafe";
-import { confirmAction } from "utils/discord/confirmAction";
-import { reply, targetSend } from "utils/discord/reply";
-import { t } from "utils/locales/i18n";
+import { BaseCommand } from "utils/commands/baseCommand";
 
 export const data = new SlashCommandBuilder()
 .setName("mute")
@@ -59,62 +52,8 @@ export const cooldown = 5;
 
 export const main = async (interaction: ChatInputCommandInteraction) => {
   try {
-    if (!(await ensureGuildInteraction(interaction))) return;
-    if (!(await validateModerationPermissions(interaction, "ModerateMembers"))) return;
-
-    const targetUser = interaction.options.getUser("user", true);
-    const duration = interaction.options.getInteger("duration", true);
-
-    const reason =
-      interaction.options.getString("reason") ||
-      t(interaction, "moderation.no_reason");
-
-    if (!(await validateModerationTarget(interaction, targetUser.id))) return;
-
-    const targetMember = await getMemberSafe(interaction.guild!, targetUser.id);
-
-    if (!targetMember)
-      return await reply(interaction, {
-        key: "errors.user_not_found",
-        ephemeral: true,
-        type: "error",
-      });
-
-    if (!(await validateRoleHierarchy(interaction, targetMember))) return;
-
-    if (!targetMember.moderatable)
-      return await reply(interaction, {
-        key: "errors.not_moderatable",
-        ephemeral: true,
-        type: "error",
-      });
-
-    const timeoutMs = duration * 60 * 1000;
-
-    const vars = {
-      guild: interaction.guild!.name,
-      reason,
-      user: targetUser.tag,
-      moderator: interaction.user.tag,
-      duration: duration.toString(),
-    };
-
-    await confirmAction(interaction, {
-      confirmKey: "moderation.mute_confirm",
-      successKey: "moderation.mute_success",
-      vars,
-
-      onConfirm: async () => {
-        await targetSend(targetMember, interaction, {
-          key: "moderation.mute_dm",
-          vars,
-          type: "info",
-        }).catch(() => null);
-
-        await targetMember.timeout(timeoutMs, reason);
-      },
-    });
-
+    BaseCommand(interaction, "mute");
+    
     /*
     ========================================
     FUTURE MODERATION LOG SYSTEM

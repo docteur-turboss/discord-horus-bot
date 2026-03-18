@@ -13,6 +13,11 @@ export const validateContext = async (
       interaction,
       "ModerateMembers",
     ))) ||
+  ((type === "lock-channel" || type === "unlock-channel") &&
+    (await NotValidateModerationPermissions(
+      interaction,
+      "ManageChannels",
+    ))) ||
   ((type === "unban" || type === "ban") &&
     (await NotValidateModerationPermissions(interaction, "BanMembers"))) ||
   ((type === "rename-member" || type === "reset-member-nickname") &&

@@ -1,4 +1,4 @@
-{
+export default {
   "action.btns.cancel": "Cancel",
   "action.btns.confirm": "Confirm",
 
@@ -152,4 +152,4 @@
   "moderation.unmute_confirm": "Are you sure you want to unmute **{user}**?",
   "moderation.unmute_dm": "You have been unmuted in **{guild}** by **{moderator}**\nReason: {reason}",
   "moderation.unmute_success": "**{user}** has been unmuted."
-}
+} as const

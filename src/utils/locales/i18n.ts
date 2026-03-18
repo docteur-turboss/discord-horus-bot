@@ -1,17 +1,19 @@
-import en from "../../locales/en.json";
-import fr from "../../locales/fr.json";
+import en from "../../locales/en";
+import fr from "../../locales/fr";
+import { TranslationKey, Translations, VarsFor } from "./i18n.types";
 import { ButtonInteraction, ChatInputCommandInteraction } from "discord.js";
 
-/* eslint-disable-next-line */
-const translations: Record<string, any> = {
+const translations: Record<string, Record<string, string>> = {
   en,
   fr,
 };
 
-export const t = (
+export const t = <
+  K extends TranslationKey
+>(
   interaction: ChatInputCommandInteraction | ButtonInteraction | string | undefined,
-  key: string,
-  vars?: Record<string, string>
+  key: K,
+  vars?: VarsFor<K>
 ) => {
   const locale = typeof interaction === "string"
     ? interaction
@@ -23,10 +25,10 @@ export const t = (
     key;
 
   if (vars) {
-    for (const v in vars) {
-      text = text.replace(`{${v}}`, vars[v]);
+    for (const [key, value] of Object.entries(vars) as [keyof typeof vars, string][]) {
+      text = text.replace(`{${String(key)}}`, value);
     }
   }
 
   return text;
-}
+};

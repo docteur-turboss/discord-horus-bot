@@ -1,4 +1,5 @@
 import { ActionRowBuilder, ButtonBuilder, ButtonInteraction, ChannelSelectMenuBuilder, ChatInputCommandInteraction, GuildMember, MentionableSelectMenuBuilder, RoleSelectMenuBuilder, StringSelectMenuBuilder, UserSelectMenuBuilder } from "discord.js";
+import { ExtractVars, TranslationKey, Translations, VarsFor } from "utils/locales/i18n.types";
 import { warningEmbed } from "../embeds/warningEmbed";
 import { successEmbed } from "../embeds/successEmbed";
 import { errorEmbed } from "../embeds/errorEmbeds";
@@ -6,14 +7,21 @@ import { infoEmbed } from "../embeds/infoEmbed";
 import { logger } from "../logger/logger";
 import { t } from "../locales/i18n";
 
-type ReplyOptions = {
-  key: string;
+type ReplyOptions<K extends TranslationKey = TranslationKey> = {
+  key: K;
   type?: EmbedType;
   ephemeral?: boolean;
-  vars?: Record<string, string|number|null>;
+  vars?: VarsFor<K>;
   withResponse?: boolean;
-  components?: ActionRowBuilder<ButtonBuilder|MentionableSelectMenuBuilder|RoleSelectMenuBuilder|UserSelectMenuBuilder|StringSelectMenuBuilder|ChannelSelectMenuBuilder>[];
-};
+  components?:  ActionRowBuilder<
+    ButtonBuilder |
+    MentionableSelectMenuBuilder |
+    RoleSelectMenuBuilder |
+    UserSelectMenuBuilder |
+    StringSelectMenuBuilder |
+    ChannelSelectMenuBuilder
+  >[];
+}
 
 type EmbedType = "success" | "error" | "info" | "warning";
 type Interaction = ChatInputCommandInteraction | ButtonInteraction;
@@ -31,45 +39,45 @@ const buildEmbed = (type: EmbedType, description: string) => {
   }
 };
 
-export const reply = async (
+export const reply = async <K extends TranslationKey>(
   interaction: Interaction,
-  options: ReplyOptions
+  options: ReplyOptions<K>
 ) => {
-  const description = t(interaction, options.key, options.vars as Record<string, string>);
+  const description = t(interaction, options.key, options.vars);
   const embed = buildEmbed(options.type ?? "success", description);
 
   const opt = {
     embeds: [embed],
     components: options.components ?? [],
-    ...options.ephemeral && { ephemeral: options.ephemeral },
-    ...options.withResponse && { withResponse: options.withResponse },
-  }
+    ...(options.ephemeral && { ephemeral: options.ephemeral }),
+    ...(options.withResponse && { withResponse: options.withResponse }),
+  };
 
   return interaction.reply(opt);
 };
 
-export const followUp = async (
+export const followUp = async <K extends TranslationKey>(
   interaction: Interaction,
-  options: ReplyOptions
+  options: ReplyOptions<K>
 ) => {
-  const description = t(interaction, options.key, options.vars as Record<string, string>);
+  const description = t(interaction, options.key, options.vars);
   const embed = buildEmbed(options.type ?? "success", description);
 
-    const opt = {
+  const opt = {
     embeds: [embed],
     components: options.components ?? [],
-    ...options.ephemeral && { ephemeral: options.ephemeral },
-    ...options.withResponse && { withResponse: options.withResponse },
-  }
-  
+    ...(options.ephemeral && { ephemeral: options.ephemeral }),
+    ...(options.withResponse && { withResponse: options.withResponse }),
+  };
+
   return interaction.followUp(opt);
 };
 
-export const editReply = async (
+export const editReply = async <K extends TranslationKey>(
   interaction: Interaction,
-  options: ReplyOptions
+  options: ReplyOptions<K>
 ) => {
-  const description = t(interaction, options.key, options.vars as Record<string, string>);
+  const description = t(interaction, options.key, options.vars);
   const embed = buildEmbed(options.type ?? "success", description);
 
   return interaction.editReply({
@@ -78,18 +86,18 @@ export const editReply = async (
   });
 };
 
-export const targetSend = async (
+export const targetSend = async <K extends TranslationKey>(
   user: GuildMember,
   interaction: Interaction,
-  options: Omit<ReplyOptions, "ephemeral" | "withResponse">
+  options: Omit<ReplyOptions<K>, "ephemeral" | "withResponse">
 ) => {
-  const description = t(interaction, options.key, options.vars as Record<string, string>);
+  const description = t(interaction, options.key, options.vars);
   const embed = buildEmbed(options.type ?? "success", description);
 
   return user.send({
     embeds: [embed],
     components: options.components ?? [],
   }).catch(() => {
-    logger.warn(`Could not send ban DM to ${user.user.tag} (${user.id})`);
-  })
-}
+    logger.warn(`Could not send DM to ${user.user.tag} (${user.id})`);
+  });
+};

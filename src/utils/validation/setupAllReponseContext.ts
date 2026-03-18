@@ -1,6 +1,7 @@
 import { ChatInputCommandInteraction, GuildMember, User } from "discord.js";
-import { BaseCommandType } from "utils/commands/baseCommand.types";
 import { isUserBannedOrReply } from "utils/moderations/getBannedUser";
+import { BaseCommandType } from "utils/commands/baseCommand.types";
+import { TranslationKey } from "utils/locales/i18n.types";
 
 export const setupAllReponseContext = (
   interaction: ChatInputCommandInteraction, 
@@ -17,9 +18,9 @@ export const setupAllReponseContext = (
     timeoutMs: number | null;
     userId: string | null;
 }) => {
-  let confirmKey,
-    successKey,
-    key,
+  let confirmKey: TranslationKey,
+    successKey: TranslationKey,
+    key: TranslationKey,
     confirmFunc,
     beforeConfirmFunc: Function | undefined;
 
@@ -66,7 +67,7 @@ export const setupAllReponseContext = (
     case "unban":
       confirmKey = "moderation.unban_confirm";
       successKey = "moderation.unban_success";
-      key = "";
+      key = "cooldown.active";
       confirmFunc = async () =>
         vars.userId && (await interaction.guild!.members.unban(vars.userId));
 

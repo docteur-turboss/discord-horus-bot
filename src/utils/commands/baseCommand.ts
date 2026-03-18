@@ -4,15 +4,12 @@ import { ChatInputCommandInteraction } from "discord.js";
 import { confirmAction } from "utils/discord/confirmAction";
 import { validateContext } from "utils/discord/validateContext";
 import { getMemberSafeOrReply } from "utils/discord/getMemberSafe";
-import { NotValidateUserIdOrReply } from "utils/validation/validateUserIdOrReply";
-import { NotValidateTimestampOrReply } from "utils/validation/validateTimestampOrReply";
-import {
-  getBannedUserOrReply,
-  isUserBannedOrReply,
-} from "utils/moderations/getBannedUser";
 import { getAllVariables } from "utils/validation/getAllVariables";
 import { GlobalValidation } from "utils/validation/globalValidation";
+import { getBannedUserOrReply } from "utils/moderations/getBannedUser";
 import { setupAllReponseContext } from "utils/validation/setupAllReponseContext";
+import { NotValidateUserIdOrReply } from "utils/validation/validateUserIdOrReply";
+import { NotValidateTimestampOrReply } from "utils/validation/validateTimestampOrReply";
 
 export const BaseCommand = async (
   interaction: ChatInputCommandInteraction,

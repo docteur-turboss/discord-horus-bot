@@ -1,9 +1,10 @@
 import { ChatInputCommandInteraction, GuildMember, PermissionFlagsBits } from "discord.js";
+import { TranslationKey } from "utils/locales/i18n.types";
 
 export type Permissions = keyof typeof PermissionFlagsBits;
 
 // Mapping Permissions → PermissionFlagsBits + error keys for user and bot
-const PERMISSION_MAP: Record<Permissions, { flag: bigint; userError: string; botError: string }> = {
+const PERMISSION_MAP: Record<Permissions, { flag: bigint; userError: TranslationKey; botError: TranslationKey }> = {
   BanMembers: { flag: PermissionFlagsBits.BanMembers, userError: "errors.no_permission_ban", botError: "errors.bot_no_permission_ban" },
   KickMembers: { flag: PermissionFlagsBits.KickMembers, userError: "errors.no_permission_kick", botError: "errors.bot_no_permission_kick" },
   ModerateMembers: { flag: PermissionFlagsBits.ModerateMembers, userError: "errors.no_permission_timeout", botError: "errors.bot_no_permission_timeout" },
@@ -67,7 +68,7 @@ const PERMISSION_MAP: Record<Permissions, { flag: bigint; userError: string; bot
 export const checkPermissions = (
   interaction: ChatInputCommandInteraction,
   permissions: Permissions | Permissions[]
-) => {
+): null|TranslationKey => {
   const member = interaction.member as GuildMember;
   const botMember = interaction.guild?.members.me as GuildMember;
 

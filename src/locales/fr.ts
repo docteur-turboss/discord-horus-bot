@@ -1,4 +1,4 @@
-{
+export default {
   "action.btns.cancel": "Annuler",
   "action.btns.confirm": "Confirmer",
 

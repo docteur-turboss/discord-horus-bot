@@ -3,12 +3,14 @@ import {
   ComponentType,
 } from "discord.js";
 import { createConfirmationButtons } from "utils/buttons/confirmationBtn";
+import { TranslationKey, VarsFor } from "utils/locales/i18n.types";
 import { reply, editReply } from "utils/discord/reply";
+import { logger } from "utils/logger/logger";
 
-type ConfirmOptions = {
-  confirmKey: string
-  successKey?: string
-  vars?: Record<string, string>
+type ConfirmOptions<K extends TranslationKey = TranslationKey, J extends TranslationKey = TranslationKey> = {
+  confirmKey: K
+  successKey?: J
+  vars?: VarsFor<K> & VarsFor<J>
   onConfirm: () => Promise<unknown>
 };
 
@@ -54,7 +56,10 @@ export async function confirmAction(
             components: [],
           });
         }
-      } catch {}
+      } catch (e) {
+        if(e === true) return;
+        logger.error("Error during confirm action : ", e as Record<string, string>)
+      }
     }
   });
 

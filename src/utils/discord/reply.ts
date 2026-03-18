@@ -10,7 +10,7 @@ type ReplyOptions = {
   key: string;
   type?: EmbedType;
   ephemeral?: boolean;
-  vars?: Record<string, string>;
+  vars?: Record<string, string|number|null>;
   withResponse?: boolean;
   components?: ActionRowBuilder<ButtonBuilder|MentionableSelectMenuBuilder|RoleSelectMenuBuilder|UserSelectMenuBuilder|StringSelectMenuBuilder|ChannelSelectMenuBuilder>[];
 };
@@ -35,7 +35,7 @@ export const reply = async (
   interaction: Interaction,
   options: ReplyOptions
 ) => {
-  const description = t(interaction, options.key, options.vars);
+  const description = t(interaction, options.key, options.vars as Record<string, string>);
   const embed = buildEmbed(options.type ?? "success", description);
 
   const opt = {
@@ -52,7 +52,7 @@ export const followUp = async (
   interaction: Interaction,
   options: ReplyOptions
 ) => {
-  const description = t(interaction, options.key, options.vars);
+  const description = t(interaction, options.key, options.vars as Record<string, string>);
   const embed = buildEmbed(options.type ?? "success", description);
 
     const opt = {
@@ -69,7 +69,7 @@ export const editReply = async (
   interaction: Interaction,
   options: ReplyOptions
 ) => {
-  const description = t(interaction, options.key, options.vars);
+  const description = t(interaction, options.key, options.vars as Record<string, string>);
   const embed = buildEmbed(options.type ?? "success", description);
 
   return interaction.editReply({
@@ -83,7 +83,7 @@ export const targetSend = async (
   interaction: Interaction,
   options: Omit<ReplyOptions, "ephemeral" | "withResponse">
 ) => {
-  const description = t(interaction, options.key, options.vars);
+  const description = t(interaction, options.key, options.vars as Record<string, string>);
   const embed = buildEmbed(options.type ?? "success", description);
 
   return user.send({

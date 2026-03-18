@@ -9,7 +9,7 @@ import { logger } from "utils/logger/logger";
 type ConfirmOptions = {
   confirmKey: string
   successKey?: string
-  vars?: Record<string, string>
+  vars?: Record<string, string|number|null>
   onConfirm: () => Promise<unknown>
 };
 

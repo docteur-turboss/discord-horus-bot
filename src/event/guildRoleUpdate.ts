@@ -13,20 +13,20 @@ export const main = async (
   newRole: Role,
 ) => {
   if (!oldRole || !newRole) return;
-  if (oldRole.guild) return;
+  if (!newRole.guild) return;
 
   try {
     const guild = newRole.guild;
 
     const log = await guild.fetchAuditLogs({ 
-      type: AuditLogEvent.RoleDelete
+      type: AuditLogEvent.RoleUpdate
     })
     if(!log) return;
 
     const firstLogEntries = log.entries.first();
     if(!firstLogEntries) return;
 
-    const member = firstLogEntries.executor
+    const member = firstLogEntries.executor;
     if(member?.partial) await member.fetch().catch(() => null);
     
     if(!member) return;
@@ -77,7 +77,36 @@ export const main = async (
       });
     }
 
+    if (oldRole.permissions.bitfield !== newRole.permissions.bitfield) {
+      const oldPerms = new Set(oldRole.permissions.toArray());
+      const newPerms = new Set(newRole.permissions.toArray());
+
+      const added = [...newPerms].filter(p => !oldPerms.has(p));
+      const removed = [...oldPerms].filter(p => !newPerms.has(p));
+
+      let value = "";
+
+      if (added.length > 0) {
+        value += `+ ${added.join(", ")}\n`;
+      }
+
+      if (removed.length > 0) {
+        value += `- ${removed.join(", ")}`;
+      }
+
+      fields.push({
+        name: t(lang, "embeds.logs.fields.permissions.update"),
+        value: value || "*updated*",
+        inline: false,
+      });
+    }
+
     if (fields.length === 0) return;
+
+    fields.push({
+      name: t(lang, "embeds.logs.fields.user.responsable"),
+      value: `<@${member.id}>`,
+    });
 
     newRole.permissions
     const embeds = logEmbed({
@@ -89,7 +118,7 @@ export const main = async (
 
     logChannel.send({
       embeds: [embeds]
-    })
+    });
   } catch (error) {
     logger.error("Error in role update events listener", error as Record<string, unknown>);
   }

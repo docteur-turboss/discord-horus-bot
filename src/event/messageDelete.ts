@@ -6,25 +6,21 @@ import { logger } from "utils/logger/logger";
 import { t } from "../utils/locales/i18n";
 
 export const data = {
-  event: Events.MessageUpdate,
+  event: Events.MessageDelete,
 };
 
 export const main = async (
-  oldMessage: OmitPartialGroupDMChannel<Message<boolean> | PartialMessage<boolean>>,
-  newMessage: OmitPartialGroupDMChannel<Message<boolean>>
+  message: OmitPartialGroupDMChannel<Message<boolean> | PartialMessage<boolean>>
 ) => {
-  if (!oldMessage) return;
-  if (!oldMessage.guild) return;
-  if (oldMessage.author?.bot) return;
+  if (!message) return;
+  if (!message.guild) return;
+  if (message.author?.bot) return;
 
   try {
-    if (oldMessage?.partial) await oldMessage.fetch().catch(() => null);
-    if (newMessage.partial) await newMessage.fetch().catch(() => null);
+    if(message.partial) await message.fetch().catch(() => null);
+    if(!message) return;
 
-    if (!oldMessage || !newMessage) return;
-    if (oldMessage.content === newMessage.content) return;
-
-    const guild = newMessage.guild;
+    const guild = message.guild;
     if(!guild) return;
 
     const logChannel = guild.channels.cache.find((channel) => {
@@ -41,31 +37,21 @@ export const main = async (
     const embeds = logEmbed({
       type: "message",
       lang,
-      description: t(lang, "embeds.logs.message.update.description"),
+      description: t(lang, "embeds.logs.message.delete.description"),
       fields: [
         {
           name: t(lang, "embeds.logs.message.fields.user"),
-          value: `<@${newMessage.author.id}>`,
+          value: message.author?`<@${message.author.id}>`:t(lang, "embeds.logs.message.fields.user.not_found"),
           inline: true,
         },
         {
           name: t(lang, "embeds.logs.message.fields.channel"),
-          value: `<#${newMessage.channel.id}>`,
+          value: `<#${message.channel.id}>`,
           inline: true,
         },
         {
-          name: t(lang, "embeds.logs.message.fields.link"),
-          value: `[Jump](${newMessage.url})`,
-          inline: false,
-        },
-        {
-          name: t(lang, "embeds.logs.message.fields.before"),
-          value: formatContent(oldMessage),
-          inline: false,
-        },
-        {
-          name: t(lang, "embeds.logs.message.fields.after"),
-          value: formatContent(newMessage),
+          name: t(lang, "embeds.logs.message.fields.content"),
+          value: formatContent(message),
           inline: false,
         },
       ],
@@ -75,6 +61,6 @@ export const main = async (
       embeds: [embeds]
     })
   } catch (error) {
-    logger.error("Error in message update events listener", error as Record<string, unknown>);
+    logger.error("Error in message events listener", error as Record<string, unknown>);
   }
 };

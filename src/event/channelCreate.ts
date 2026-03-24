@@ -8,7 +8,7 @@ import {
   Events, 
 } from "discord.js";
 import { IC_ZeroWidthJoiner } from "utils/consts/invisiblesChars";
-import { TranslationKey } from "utils/locales/i18n.types";
+import { CHANNEL_TYPE_MAP } from "utils/consts/channelTypeMap";
 import { formatPerm } from "utils/helper/formatPerm";
 import { logEmbed } from "utils/embeds/logEmbed";
 import { logger } from "utils/logger/logger";
@@ -16,14 +16,6 @@ import { t } from "utils/locales/i18n";
 
 export const data = {
   event: Events.ChannelCreate,
-};
-
-const CHANNEL_TYPE_MAP: Record<number, TranslationKey> = {
-  [ChannelType.GuildText]: "channel.type.text",
-  [ChannelType.GuildVoice]: "channel.type.voice",
-  [ChannelType.GuildForum]: "channel.type.forum",
-  [ChannelType.GuildAnnouncement]: "channel.type.announcement",
-  [ChannelType.GuildStageVoice]: "channel.type.stage",
 };
 
 export const main = async (
@@ -58,7 +50,6 @@ export const main = async (
 
     const lang = guild.preferredLocale.split("-")[0];
 
-    // Permissions
     const permissions = channel.permissionOverwrites.cache
       .map(overwrite => {
         const allowed = overwrite.allow.toArray().map(p => formatPerm(p, lang));
@@ -96,9 +87,6 @@ export const main = async (
       }
     ];
 
-    // ===== TYPE-SPECIFIC DATA =====
-
-    // TEXT
     if (channel.type === ChannelType.GuildText || channel.type === ChannelType.GuildAnnouncement) {
       const text = channel as TextChannel;
 
@@ -116,7 +104,6 @@ export const main = async (
       );
     }
 
-    // VOICE / STAGE
     if (channel.type === ChannelType.GuildVoice || channel.type === ChannelType.GuildStageVoice) {
       const voice = channel as VoiceChannel;
 
@@ -134,7 +121,6 @@ export const main = async (
       );
     }
 
-    // FORUM
     if (channel.type === ChannelType.GuildForum) {
       const forum = channel as ForumChannel;
 
@@ -152,14 +138,12 @@ export const main = async (
       );
     }
 
-    // Permissions
     fields.push({
       name: t(lang, "embeds.logs.fields.permissions"),
       value: permissions,
       inline: false,
     });
 
-    // Executor
     fields.push({
       name: t(lang, "embeds.logs.fields.user.responsable"),
       value: `<@${member.id}>`,

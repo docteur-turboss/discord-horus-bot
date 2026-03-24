@@ -17,6 +17,8 @@ export default {
   "embeds.logs.candidatures": "📨 Application logs",
   "embeds.logs.channels": "📁 Channel logs",
   "embeds.logs.channels.create.description": "A channel has been created.",
+  "embeds.logs.channels.delete.description": "A channel has been deleted.",
+  "embeds.logs.channels.update.description": "A channel has been updated.",
   "embeds.logs.fields.after": "After",
   "embeds.logs.fields.before": "Before",
   "embeds.logs.fields.bitrate": "Bitrate",

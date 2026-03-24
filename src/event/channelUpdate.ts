@@ -7,7 +7,6 @@ import {
   TextChannel,
   DMChannel,
   Events,
-  GuildChannel,
 } from "discord.js";
 import { IC_ZeroWidthJoiner } from "utils/consts/invisiblesChars";
 import { formatPerm } from "utils/helper/formatPerm";
@@ -44,12 +43,11 @@ export const main = async (
     
     if (!member || member.bot) return;
 
-    const logChannel = guild.channels.cache.find((channel) => {
-      if (!channel.isTextBased()) return false;
-      if (!("topic" in channel)) return false;
+    const logChannel = guild.channels.cache.find((ch) => {
+      if (!ch.isTextBased()) return false;
+      if (!("topic" in ch)) return false;
 
-      const textChannel = channel as TextChannel;
-      return textChannel.topic?.includes(IC_ZeroWidthJoiner);
+      return (ch as TextChannel).topic?.includes(IC_ZeroWidthJoiner);
     }) as TextChannel | undefined;
     if (!logChannel) return;
 
@@ -198,9 +196,9 @@ export const main = async (
     });
 
     const embeds = logEmbed({
-      type: "roles",
+      type: "channels",
       lang,
-      description: t(lang, "embeds.logs.roles.update.description"),
+      description: t(lang, "embeds.logs.channels.update.description"),
       fields
     });
 

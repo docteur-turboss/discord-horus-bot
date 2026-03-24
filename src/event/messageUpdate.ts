@@ -44,27 +44,27 @@ export const main = async (
       description: t(lang, "embeds.logs.message.update.description"),
       fields: [
         {
-          name: t(lang, "embeds.logs.message.fields.user"),
+          name: t(lang, "embeds.logs.fields.user"),
           value: `<@${newMessage.author.id}>`,
           inline: true,
         },
         {
-          name: t(lang, "embeds.logs.message.fields.channel"),
+          name: t(lang, "embeds.logs.fields.channel"),
           value: `<#${newMessage.channel.id}>`,
           inline: true,
         },
         {
-          name: t(lang, "embeds.logs.message.fields.link"),
+          name: t(lang, "embeds.logs.fields.link"),
           value: `[Jump](${newMessage.url})`,
           inline: false,
         },
         {
-          name: t(lang, "embeds.logs.message.fields.before"),
+          name: t(lang, "embeds.logs.fields.before"),
           value: formatContent(oldMessage),
           inline: false,
         },
         {
-          name: t(lang, "embeds.logs.message.fields.after"),
+          name: t(lang, "embeds.logs.fields.after"),
           value: formatContent(newMessage),
           inline: false,
         },

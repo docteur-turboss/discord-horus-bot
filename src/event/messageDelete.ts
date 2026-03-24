@@ -40,17 +40,17 @@ export const main = async (
       description: t(lang, "embeds.logs.message.delete.description"),
       fields: [
         {
-          name: t(lang, "embeds.logs.message.fields.user"),
-          value: message.author?`<@${message.author.id}>`:t(lang, "embeds.logs.message.fields.user.not_found"),
+          name: t(lang, "embeds.logs.fields.user"),
+          value: message.author?`<@${message.author.id}>`:t(lang, "embeds.logs.fields.user.not_found"),
           inline: true,
         },
         {
-          name: t(lang, "embeds.logs.message.fields.channel"),
+          name: t(lang, "embeds.logs.fields.channel"),
           value: `<#${message.channel.id}>`,
           inline: true,
         },
         {
-          name: t(lang, "embeds.logs.message.fields.content"),
+          name: t(lang, "embeds.logs.fields.content"),
           value: formatContent(message),
           inline: false,
         },

@@ -46,7 +46,7 @@ export const main = async (
     const embeds = logEmbed({
       type: "roles",
       lang,
-      description: t(lang, "embeds.logs.role.delete.description"),
+      description: t(lang, "embeds.logs.roles.delete.description"),
       fields: [
         {
           name: t(lang, "embeds.logs.fields.role"),
@@ -64,6 +64,6 @@ export const main = async (
       embeds: [embeds]
     })
   } catch (error) {
-    logger.error("Error in role events listener", error as Record<string, unknown>);
+    logger.error("Error in role delete events listener", error as Record<string, unknown>);
   }
 };

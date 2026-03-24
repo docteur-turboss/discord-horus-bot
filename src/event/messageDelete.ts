@@ -61,6 +61,6 @@ export const main = async (
       embeds: [embeds]
     })
   } catch (error) {
-    logger.error("Error in message events listener", error as Record<string, unknown>);
+    logger.error("Error in message delete events listener", error as Record<string, unknown>);
   }
 };

@@ -3,6 +3,7 @@ import { IC_ZeroWidthNonJoiner } from "utils/consts/invisiblesChars";
 import { logEmbed } from "utils/embeds/logEmbed";
 import { logger } from "utils/logger/logger";
 import { t } from "utils/locales/i18n";
+import { formatPerm } from "utils/helper/formatPerm";
 
 export const data = {
   event: Events.GuildRoleUpdate,
@@ -87,11 +88,22 @@ export const main = async (
       let value = "";
 
       if (added.length > 0) {
-        value += `+ ${added.join(", ")}\n`;
+        let addedMapped = added.map(v => formatPerm(v, lang));
+        const addLeng = addedMapped.length;
+
+        addedMapped = addLeng>10? addedMapped.slice(0, 10): addedMapped;
+        value += `+ \n\`${addedMapped.join("`,\n`")}\`` + (addLeng>10? "\n...": "");
       }
 
       if (removed.length > 0) {
-        value += `- ${removed.join(", ")}`;
+        if(value !== "") value += "\n=====================\n"
+        
+        let removeMapped = removed.map(v => formatPerm(v, lang));
+        const remLeng = removeMapped.length;
+
+        removeMapped = remLeng>10? removeMapped.slice(0, 10): removeMapped;
+
+        value += `\-\n\`${removeMapped.join("`,\n`")}\`` + (remLeng>10? "\n...": "");
       }
 
       fields.push({

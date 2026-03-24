@@ -3,6 +3,7 @@ import { AuditLogEvent, Events, Role, TextChannel } from "discord.js";
 import { logEmbed } from "utils/embeds/logEmbed";
 import { logger } from "utils/logger/logger";
 import { t } from "utils/locales/i18n";
+import { formatPerm } from "utils/helper/formatPerm";
 
 export const data = {
   event: Events.GuildRoleCreate,
@@ -58,7 +59,7 @@ export const main = async (role: Role) => {
       },
       {
         name: t(lang, "embeds.logs.fields.permissions"),
-        value: `${role.permissions.toArray().join(", ") || "*none*"}`,
+        value: `${role.permissions.toArray().map(v => formatPerm(v, lang)).join(",\n") || "*none*"}`,
         inline: false,
       },{
         name: t(lang, "embeds.logs.fields.user.responsable"),

@@ -17,7 +17,7 @@ export const main = async (role: Role) => {
     const guild = role.guild;
 
     const log = await guild.fetchAuditLogs({ 
-      type: AuditLogEvent.RoleUpdate
+      type: AuditLogEvent.RoleCreate
     })
     if(!log) return;
 
@@ -59,7 +59,7 @@ export const main = async (role: Role) => {
       },
       {
         name: t(lang, "embeds.logs.fields.permissions"),
-        value: `${role.permissions.toArray().map(v => formatPerm(v, lang)).join(",\n") || "*none*"}`,
+        value: `${role.permissions.toArray().map(v => formatPerm(v, lang)).slice(0, 10).join(",\n") || "*none*"}`,
         inline: false,
       },{
         name: t(lang, "embeds.logs.fields.user.responsable"),

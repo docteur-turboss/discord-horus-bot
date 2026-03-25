@@ -1,8 +1,9 @@
 import { t } from "../utils/locales/i18n";
 import { logger } from "utils/logger/logger";
 import { logEmbed } from "utils/embeds/logEmbed";
-import { IC_ZeroWidthNonJoiner } from "utils/consts/invisiblesChars";
-import { AuditLogEvent, Events, Role, TextChannel } from "discord.js";
+import { getLogRole } from "utils/discord/getLogRole";
+import { AuditLogEvent, Events, Role } from "discord.js";
+import { getExecutorFromAuditLog } from "utils/helper/getExecutorFromAuditLog";
 
 export const data = {
   event: Events.GuildRoleDelete,
@@ -18,27 +19,10 @@ export const main = async (
     const guild = role.guild;
     if(!guild) return;
 
-    const log = await role.guild.fetchAuditLogs({ 
-      type: AuditLogEvent.RoleDelete
-    })
-    if(!log) return;
-
-    const firstLogEntries = log.entries.first();
-    if(!firstLogEntries) return;
-
-    const member = firstLogEntries.executor
-    if(member?.partial) await member.fetch().catch(() => null);
-    
+    const member = await getExecutorFromAuditLog(guild, AuditLogEvent.RoleDelete)
     if(!member) return;
-    if(member.bot) return;
 
-    const logChannel = guild.channels.cache.find((channel) => {
-      if (!channel.isTextBased()) return false;
-      if (!("topic" in channel)) return false;
-
-      const textChannel = channel as TextChannel;
-      return textChannel.topic?.includes(IC_ZeroWidthNonJoiner);
-    }) as TextChannel | undefined;
+    const logChannel = getLogRole(guild);
     if (!logChannel) return;
 
     const lang = guild.preferredLocale.split("-")[0]

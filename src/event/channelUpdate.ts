@@ -8,12 +8,13 @@ import {
   DMChannel,
   Events,
 } from "discord.js";
-import { IC_ZeroWidthJoiner } from "utils/consts/invisiblesChars";
-import { formatPerm } from "utils/helper/formatPerm";
+import { getExecutorFromAuditLog } from "utils/helper/getExecutorFromAuditLog";
+import { formatChannelPermissions } from "utils/helper/formatPermissions";
+import { CHANNEL_TYPE_MAP } from "utils/consts/channelTypeMap";
+import { getLogChannel } from "utils/discord/getLogChannel";
 import { logEmbed } from "utils/embeds/logEmbed";
 import { logger } from "utils/logger/logger";
 import { t } from "utils/locales/i18n";
-import { CHANNEL_TYPE_MAP } from "utils/consts/channelTypeMap";
 
 export const data = {
   event: Events.ChannelUpdate,
@@ -29,26 +30,11 @@ export const main = async (
     if(oldChannel.partial) await oldChannel.fetch().catch(() => null);
     if(newChannel.partial) await newChannel.fetch().catch(() => null);
     const guild = newChannel.guild;
+        
+    const member = await getExecutorFromAuditLog(guild, AuditLogEvent.ChannelUpdate)
+    if(!member) return;
 
-    const log = await guild.fetchAuditLogs({ 
-      type: AuditLogEvent.ChannelUpdate
-    })
-    if(!log) return;
-
-    const firstLogEntries = log.entries.first();
-    if(!firstLogEntries) return;
-
-    const member = firstLogEntries.executor;
-    if(member?.partial) await member.fetch().catch(() => null);
-    
-    if (!member || member.bot) return;
-
-    const logChannel = guild.channels.cache.find((ch) => {
-      if (!ch.isTextBased()) return false;
-      if (!("topic" in ch)) return false;
-
-      return (ch as TextChannel).topic?.includes(IC_ZeroWidthJoiner);
-    }) as TextChannel | undefined;
+    const logChannel = getLogChannel(guild);
     if (!logChannel) return;
 
     const lang = guild.preferredLocale.split("-")[0];
@@ -166,20 +152,7 @@ export const main = async (
         return n && o.allow.bitfield === n.allow.bitfield && o.deny.bitfield === n.deny.bitfield;
       })
     ) {
-      const format = (channel: NonThreadGuildBasedChannel) =>
-        channel.permissionOverwrites.cache
-          .map(o => {
-            const allowed = o.allow.toArray().map(p => formatPerm(p, lang));
-            const denied = o.deny.toArray().map(p => formatPerm(p, lang));
-
-            return [
-              allowed.length ? `+ ${allowed.join(", ")}` : null,
-              denied.length ? `- ${denied.join(", ")}` : null,
-            ].filter(Boolean).join("\n");
-          })
-          .filter(Boolean)
-          .slice(0, 5)
-          .join("\n\n") || "*none*";
+      const format = (channel: NonThreadGuildBasedChannel) => formatChannelPermissions(channel, lang);
 
       fields.push({
         name: t(lang, "embeds.logs.fields.permissions.update"),

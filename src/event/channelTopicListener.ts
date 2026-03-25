@@ -17,6 +17,7 @@ import {
   IC_HairSpace,
   IC_ThinSpace
 } from "utils/consts/invisiblesChars";
+import { getExecutorFromAuditLog } from "utils/helper/getExecutorFromAuditLog";
 
 export const data = {
   event: Events.ChannelUpdate,
@@ -56,17 +57,9 @@ export const main = async (
 
     const guild = newChannel.guild;
     if (!guild) return;
-
-    const logs = await guild.fetchAuditLogs({
-      type: AuditLogEvent.ChannelUpdate,
-      limit: 5
-    });
-
-    const entry = logs.entries.find(e => e.targetId === newChannel.id);
-    if (!entry) return;
-
-    const executor = entry.executor;
-    if (executor?.id === guild.members.me?.id) return;
+        
+    const member = await getExecutorFromAuditLog(guild, AuditLogEvent.ChannelUpdate)
+    if(!member) return;
 
     const hadInvisible = INVISIBLE_CHARS.some(char => oldTopic.includes(char));
     const stillHasInvisible = INVISIBLE_CHARS.some(char => newTopic.includes(char));

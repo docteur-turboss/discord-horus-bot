@@ -1,9 +1,11 @@
-import { IC_ZeroWidthNonJoiner } from "utils/consts/invisiblesChars";
-import { AuditLogEvent, Events, Role, TextChannel } from "discord.js";
+import { getExecutorFromAuditLog } from "utils/helper/getExecutorFromAuditLog";
+import { AuditLogEvent, Events, Role } from "discord.js";
+import { getLogRole } from "utils/discord/getLogRole";
+import { formatPerm } from "utils/helper/formatPerm";
 import { logEmbed } from "utils/embeds/logEmbed";
 import { logger } from "utils/logger/logger";
 import { t } from "utils/locales/i18n";
-import { formatPerm } from "utils/helper/formatPerm";
+import { formatRolePermissions } from "utils/helper/formatPermissions";
 
 export const data = {
   event: Events.GuildRoleCreate,
@@ -15,28 +17,11 @@ export const main = async (role: Role) => {
 
   try {
     const guild = role.guild;
-
-    const log = await guild.fetchAuditLogs({ 
-      type: AuditLogEvent.RoleCreate
-    })
-    if(!log) return;
-
-    const firstLogEntries = log.entries.first();
-    if(!firstLogEntries) return;
-
-    const member = firstLogEntries.executor
-    if(member?.partial) await member.fetch().catch(() => null);
     
+    const member = await getExecutorFromAuditLog(guild, AuditLogEvent.RoleCreate)
     if(!member) return;
-    if(member.bot) return;
 
-    const logChannel = guild.channels.cache.find((channel) => {
-      if (!channel.isTextBased()) return false;
-      if (!("topic" in channel)) return false;
-
-      const textChannel = channel as TextChannel;
-      return textChannel.topic?.includes(IC_ZeroWidthNonJoiner);
-    }) as TextChannel | undefined;
+    const logChannel = getLogRole(guild);
     if (!logChannel) return;
 
     const lang = guild.preferredLocale.split("-")[0];
@@ -59,7 +44,7 @@ export const main = async (role: Role) => {
       },
       {
         name: t(lang, "embeds.logs.fields.permissions"),
-        value: `${role.permissions.toArray().map(v => formatPerm(v, lang)).slice(0, 10).join(",\n") || "*none*"}`,
+        value: `${formatRolePermissions(role, lang)}`,
         inline: false,
       },{
         name: t(lang, "embeds.logs.fields.user.responsable"),
@@ -76,10 +61,10 @@ export const main = async (role: Role) => {
     }
 
     const embed = logEmbed({
-      type: "roles",
-      lang,
       description: t(lang, "embeds.logs.roles.create.description"),
+      type: "roles",
       fields,
+      lang,
     });
 
     await logChannel.send({

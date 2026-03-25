@@ -15,7 +15,9 @@ import {
 } from "utils/consts/invisiblesChars";
 import { reply } from "utils/discord/reply";
 import { t } from "utils/locales/i18n";
-import { logPanelContainer } from "utils/discord/logPanelContainer";
+import { logPanelContainer } from "utils/embeds/logPanelContainer";
+import { computeLogState, findDashboardChannel, getTextChannelsWithTopic } from "utils/helper/getLogChannelWithTopic";
+import { createLogDashboard } from "utils/discord/createLogDashboard";
 
 export const data = new SlashCommandBuilder()
 .setName("log")
@@ -34,70 +36,35 @@ export const cooldown = 5;
 export const main = async (interaction: ChatInputCommandInteraction) => {
   try {
     const guild = interaction.guild;
-    if(!guild) return; 
-    let channel;
+    if (!guild) return;
 
-    const channels = guild.channels.cache.filter(ch => {
-      if (!ch.isTextBased()) return false;
-      if (!("topic" in ch)) return false;
-      return true;
-    });
+    const channels = getTextChannelsWithTopic(guild);
 
-    const hasMessageLog = channels.some(ch => ("topic" in ch) && ch.topic?.includes(IC_ZeroWidthSpace));
-    const hasRoleLog = channels.some(ch => ("topic" in ch) && ch.topic?.includes(IC_ZeroWidthNonJoiner));
-    const hasChannelLog = channels.some(ch => ("topic" in ch) && ch.topic?.includes(IC_ZeroWidthJoiner));
+    const state = computeLogState(channels);
 
-    const existing = channels.find(ch => ("topic" in ch) && ch.topic?.includes(IC_ThinSpace));
+    const dashboardCheck = await findDashboardChannel(guild, channels);
 
-    if (existing && existing.isTextBased() && "messages" in existing) {
-      const messages = await existing.messages.fetch({ limit: 10 });
-
-      const botMessage = messages.find(m => 
-        m.author.id === guild.members.me?.id &&
-        m.components.length > 0
-      );
-
-      if (botMessage) {
-        return await reply(interaction, {
-          key: "errors.log_already_exist",
-          ephemeral: true,
-          type: "error",
-        });
-      }
-
-      channel = existing;
-    }
-
-    if (!channel) {
-      const category = await guild.channels.create({
-        name: t(interaction, "channel.log_system"),
-        type: ChannelType.GuildCategory,
-      });
-
-      channel = await guild.channels.create({
-        name: "dashboard",
-        type: ChannelType.GuildText,
-        parent: category.id,
-        topic: `Somes ${IC_ThinSpace} Informations...`,
-        permissionOverwrites: [
-          {
-            id: guild.roles.everyone.id,
-            deny: [PermissionFlagsBits.ViewChannel],
-          },
-        ],
+    if (dashboardCheck === "ALREADY_EXISTS") {
+      return reply(interaction, {
+        key: "errors.log_already_exist",
+        ephemeral: true,
+        type: "error",
       });
     }
+
+    const channel =
+      dashboardCheck instanceof Object
+        ? dashboardCheck
+        : await createLogDashboard(interaction);
 
     const container = logPanelContainer({
-      hasRoleLog,
       interaction,
-      hasChannelLog,
-      hasMessageLog,
+      ...state,
     });
 
     await channel.send({
       components: [container],
-      flags: MessageFlags.IsComponentsV2
+      flags: MessageFlags.IsComponentsV2,
     });
 
     await reply(interaction, {
@@ -105,9 +72,9 @@ export const main = async (interaction: ChatInputCommandInteraction) => {
       ephemeral: true,
       type: "info",
       vars: {
-        channel: `<#${channel.id}>`
-      }
-    })
+        channel: `<#${channel.id}>`,
+      },
+    });
 
   } catch (err) {
     catchErrorInCommand(err, interaction, "CreateLogSystem");

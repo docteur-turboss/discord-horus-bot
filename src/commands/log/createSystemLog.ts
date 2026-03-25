@@ -31,8 +31,6 @@ export const data = new SlashCommandBuilder()
 
 export const cooldown = 5;
 
-
-
 export const main = async (interaction: ChatInputCommandInteraction) => {
   try {
     const guild = interaction.guild;
@@ -96,7 +94,7 @@ export const main = async (interaction: ChatInputCommandInteraction) => {
       hasChannelLog,
       hasMessageLog,
     });
-    
+
     await channel.send({
       components: [container],
       flags: MessageFlags.IsComponentsV2

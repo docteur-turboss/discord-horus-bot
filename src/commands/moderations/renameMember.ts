@@ -43,6 +43,5 @@ export const cooldown = 5;
 export const main = async (interaction: ChatInputCommandInteraction) => {
   try {
     BaseCommand(interaction, "rename-member")
-
   } catch (err) { catchErrorInCommand(err, interaction, "rename-member") }
 };

@@ -1,6 +1,6 @@
 import en from "../../locales/en";
 import fr from "../../locales/fr";
-import { TranslationKey, Translations, VarsFor } from "./i18n.types";
+import { TranslationKey, VarsFor } from "./i18n.types";
 import { ButtonInteraction, ChatInputCommandInteraction } from "discord.js";
 
 const translations: Record<string, Record<string, string>> = {

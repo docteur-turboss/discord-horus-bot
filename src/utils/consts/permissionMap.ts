@@ -1,0 +1,63 @@
+import { PermissionFlagsBits, Permissions } from "discord.js";
+import { TranslationKey } from "utils/locales/i18n.types";
+
+// Mapping Permissions → PermissionFlagsBits + error keys for user and bot
+export const PERMISSION_MAP: Record<Permissions, { 
+  flag: bigint; 
+  userError: TranslationKey; 
+  botError: TranslationKey; 
+  permissionName: TranslationKey 
+}> = {
+  BanMembers: { permissionName: "permission.ban_members", flag: PermissionFlagsBits.BanMembers, userError: "errors.no_permission_ban", botError: "errors.bot_no_permission_ban" },
+  KickMembers: { permissionName: "permission.kick_members", flag: PermissionFlagsBits.KickMembers, userError: "errors.no_permission_kick", botError: "errors.bot_no_permission_kick" },
+  ModerateMembers: { permissionName: "permission.moderate_members", flag: PermissionFlagsBits.ModerateMembers, userError: "errors.no_permission_timeout", botError: "errors.bot_no_permission_timeout" },
+  ManageRoles: { permissionName: "permission.manage_roles", flag: PermissionFlagsBits.ManageRoles, userError: "errors.no_permission_manage_roles", botError: "errors.bot_no_permission_manage_roles" },
+  ManageChannels: { permissionName: "permission.manage_channels", flag: PermissionFlagsBits.ManageChannels, userError: "errors.no_permission_manage_channels", botError: "errors.bot_no_permission_manage_channels" },
+  ManageNicknames: { permissionName: "permission.manage_nicknames", flag: PermissionFlagsBits.ManageNicknames, userError: "errors.no_permission_manage_nicknames", botError: "errors.bot_no_permission_manage_nicknames" },
+  AddReactions: { permissionName: "permission.add_reactions", flag: PermissionFlagsBits.AddReactions, userError: "errors.no_permission_add_reactions", botError: "errors.bot_no_permission_add_reactions" },
+  ManageMessages: { permissionName: "permission.manage_messages", flag: PermissionFlagsBits.ManageMessages, userError: "errors.no_permission_manage_messages", botError: "errors.bot_no_permission_manage_messages" },
+  Administrator: { permissionName: "permission.administrator", flag: PermissionFlagsBits.Administrator, userError: "errors.no_permission_administrator", botError: "errors.bot_no_permission_administrator" },
+  AttachFiles: { permissionName: "permission.attach_files", flag: PermissionFlagsBits.AttachFiles, userError: "errors.no_permission_attach_files", botError: "errors.bot_no_permission_attach_files" },
+  BypassSlowmode: { permissionName: "permission.bypass_slowmode", flag: PermissionFlagsBits.BypassSlowmode, userError: "errors.no_permission_bypass_slowmode", botError: "errors.bot_no_permission_bypass_slowmode" },
+  ChangeNickname: { permissionName: "permission.change_nickname", flag: PermissionFlagsBits.ChangeNickname, userError: "errors.no_permission_change_nickname", botError: "errors.bot_no_permission_change_nickname" },
+  Connect: { permissionName: "permission.connect", flag: PermissionFlagsBits.Connect, userError: "errors.no_permission_connect", botError: "errors.bot_no_permission_connect" },
+  CreateEvents: { permissionName: "permission.create_events", flag: PermissionFlagsBits.CreateEvents, userError: "errors.no_permission_create_events", botError: "errors.bot_no_permission_create_events" },
+  CreateGuildExpressions: { permissionName: "permission.create_guild_expressions", flag: PermissionFlagsBits.CreateGuildExpressions, userError: "errors.no_permission_create_guild_expressions", botError: "errors.bot_no_permission_create_guild_expressions" },
+  CreateInstantInvite: { permissionName: "permission.create_instant_invite", flag: PermissionFlagsBits.CreateInstantInvite, userError: "errors.no_permission_create_instant_invite", botError: "errors.bot_no_permission_create_instant_invite" },
+  CreatePrivateThreads: { permissionName: "permission.create_private_threads", flag: PermissionFlagsBits.CreatePrivateThreads, userError: "errors.no_permission_create_private_threads", botError: "errors.bot_no_permission_create_private_threads" },
+  CreatePublicThreads: { permissionName: "permission.create_public_threads", flag: PermissionFlagsBits.CreatePublicThreads, userError: "errors.no_permission_create_public_threads", botError: "errors.bot_no_permission_create_public_threads" },
+  DeafenMembers: { permissionName: "permission.deafen_members", flag: PermissionFlagsBits.DeafenMembers, userError: "errors.no_permission_deafen_members", botError: "errors.bot_no_permission_deafen_members" },
+  EmbedLinks: { permissionName: "permission.embed_links", flag: PermissionFlagsBits.EmbedLinks, userError: "errors.no_permission_embed_links", botError: "errors.bot_no_permission_embed_links" },
+  ViewAuditLog: { permissionName: "permission.view_audit_log", flag: PermissionFlagsBits.ViewAuditLog, userError: "errors.no_permission_view_audit_log", botError: "errors.bot_no_permission_view_audit_log" },
+  ViewChannel: { permissionName: "permission.view_channel", flag: PermissionFlagsBits.ViewChannel, userError: "errors.no_permission_view_channel", botError: "errors.bot_no_permission_view_channel" },
+  ManageEmojisAndStickers: { permissionName: "permission.manage_emojis_and_stickers", flag: PermissionFlagsBits.ManageEmojisAndStickers, userError: "errors.no_permission_manage_emojis_and_stickers", botError: "errors.bot_no_permission_manage_emojis_and_stickers" },
+  ManageEvents: { permissionName: "permission.manage_events", flag: PermissionFlagsBits.ManageEvents, userError: "errors.no_permission_manage_events", botError: "errors.bot_no_permission_manage_events" },
+  ManageGuild: { permissionName: "permission.manage_guild", flag: PermissionFlagsBits.ManageGuild, userError: "errors.no_permission_manage_guild", botError: "errors.bot_no_permission_manage_guild" },
+  ManageGuildExpressions: { permissionName: "permission.manage_guild_expressions", flag: PermissionFlagsBits.ManageGuildExpressions, userError: "errors.no_permission_manage_guild_expressions", botError: "errors.bot_no_permission_manage_guild_expressions" },
+  ManageThreads: { permissionName: "permission.manage_threads", flag: PermissionFlagsBits.ManageThreads, userError: "errors.no_permission_manage_threads", botError: "errors.bot_no_permission_manage_threads" },
+  ManageWebhooks: { permissionName: "permission.manage_webhooks", flag: PermissionFlagsBits.ManageWebhooks, userError: "errors.no_permission_manage_webhooks", botError: "errors.bot_no_permission_manage_webhooks" },
+  MentionEveryone: { permissionName: "permission.mention_everyone", flag: PermissionFlagsBits.MentionEveryone, userError: "errors.no_permission_mention_everyone", botError: "errors.bot_no_permission_mention_everyone" },
+  MoveMembers: { permissionName: "permission.move_members", flag: PermissionFlagsBits.MoveMembers, userError: "errors.no_permission_move_members", botError: "errors.bot_no_permission_move_members" },
+  MuteMembers: { permissionName: "permission.mute_members", flag: PermissionFlagsBits.MuteMembers, userError: "errors.no_permission_mute_voice", botError: "errors.bot_no_permission_mute_voice" },
+  PinMessages: { permissionName: "permission.pin_messages", flag: PermissionFlagsBits.PinMessages, userError: "errors.no_permission_pin_messages", botError: "errors.bot_no_permission_pin_messages" },
+  PrioritySpeaker: { permissionName: "permission.priority_speaker", flag: PermissionFlagsBits.PrioritySpeaker, userError: "errors.no_permission_priority_speaker", botError: "errors.bot_no_permission_priority_speaker" },
+  ReadMessageHistory: { permissionName: "permission.read_message_history", flag: PermissionFlagsBits.ReadMessageHistory, userError: "errors.no_permission_read_message_history", botError: "errors.bot_no_permission_read_message_history" },
+  RequestToSpeak: { permissionName: "permission.request_to_speak", flag: PermissionFlagsBits.RequestToSpeak, userError: "errors.no_permission_request_to_speak", botError: "errors.bot_no_permission_request_to_speak" },
+  SendMessages: { permissionName: "permission.send_messages", flag: PermissionFlagsBits.SendMessages, userError: "errors.no_permission_send_messages", botError: "errors.bot_no_permission_send_messages" },
+  SendMessagesInThreads: { permissionName: "permission.send_messages_in_threads", flag: PermissionFlagsBits.SendMessagesInThreads, userError: "errors.no_permission_send_messages_in_threads", botError: "errors.bot_no_permission_send_messages_in_threads" },
+  SendPolls: { permissionName: "permission.send_polls", flag: PermissionFlagsBits.SendPolls, userError: "errors.no_permission_send_polls", botError: "errors.bot_no_permission_send_polls" },
+  SendTTSMessages: { permissionName: "permission.send_tts_messages", flag: PermissionFlagsBits.SendTTSMessages, userError: "errors.no_permission_send_tts_messages", botError: "errors.bot_no_permission_send_tts_messages" },
+  SendVoiceMessages: { permissionName: "permission.send_voice_messages", flag: PermissionFlagsBits.SendVoiceMessages, userError: "errors.no_permission_send_voice_messages", botError: "errors.bot_no_permission_send_voice_messages" },
+  Speak: { permissionName: "permission.speak", flag: PermissionFlagsBits.Speak, userError: "errors.no_permission_speak", botError: "errors.bot_no_permission_speak" },
+  Stream: { permissionName: "permission.stream", flag: PermissionFlagsBits.Stream, userError: "errors.no_permission_stream", botError: "errors.bot_no_permission_stream" },
+  UseEmbeddedActivities: { permissionName: "permission.use_embedded_activities", flag: PermissionFlagsBits.UseEmbeddedActivities, userError: "errors.no_permission_use_embedded_activities", botError: "errors.bot_no_permission_use_embedded_activities" },
+  UseApplicationCommands: { permissionName: "permission.use_application_commands", flag: PermissionFlagsBits.UseApplicationCommands, userError: "errors.no_permission_use_application_commands", botError: "errors.bot_no_permission_use_application_commands" },
+  UseExternalApps: { permissionName: "permission.use_external_apps", flag: PermissionFlagsBits.UseExternalApps, userError: "errors.no_permission_use_external_apps", botError: "errors.bot_no_permission_use_external_apps" },
+  UseExternalEmojis: { permissionName: "permission.use_external_emojis", flag: PermissionFlagsBits.UseExternalEmojis, userError: "errors.no_permission_use_external_emojis", botError: "errors.bot_no_permission_use_external_emojis" },
+  UseExternalSounds: { permissionName: "permission.use_external_sounds", flag: PermissionFlagsBits.UseExternalSounds, userError: "errors.no_permission_use_external_sounds", botError: "errors.bot_no_permission_use_external_sounds" },
+  UseExternalStickers: { permissionName: "permission.use_external_stickers", flag: PermissionFlagsBits.UseExternalStickers, userError: "errors.no_permission_use_external_stickers", botError: "errors.bot_no_permission_use_external_stickers" },
+  UseSoundboard: { permissionName: "permission.use_soundboard", flag: PermissionFlagsBits.UseSoundboard, userError: "errors.no_permission_use_soundboard", botError: "errors.bot_no_permission_use_soundboard" },
+  UseVAD: { permissionName: "permission.use_vad", flag: PermissionFlagsBits.UseVAD, userError: "errors.no_permission_use_vad", botError: "errors.bot_no_permission_use_vad" },
+  ViewCreatorMonetizationAnalytics: { permissionName: "permission.view_creator_monetization_analytics", flag: PermissionFlagsBits.ViewCreatorMonetizationAnalytics, userError: "errors.no_permission_view_creator_monetization_analytics", botError: "errors.bot_no_permission_view_creator_monetization_analytics" },
+  ViewGuildInsights: { permissionName: "permission.view_guild_insights", flag: PermissionFlagsBits.ViewGuildInsights, userError: "errors.no_permission_view_guild_insights", botError: "errors.bot_no_permission_view_guild_insights" },
+};

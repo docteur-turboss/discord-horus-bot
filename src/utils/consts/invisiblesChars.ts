@@ -1,0 +1,12 @@
+export const IC_InvisibleSeparator = "\u2063";
+export const IC_ZeroWidthNonJoiner = "\u200C";
+export const IC_NonBreakinSpace = "\u00A0";
+export const IC_ZeroWidthJoiner = "\u200D";
+export const IC_LeftToRightMark = "\u200E";
+export const IC_RightToLeftMark = "\u200F";
+export const IC_ZeroWidthSpace = "\u200B";
+export const IC_ByteOrderMark = "\uFEFF";
+export const IC_InvisiblePlus = "\u2064";
+export const IC_WordJoiner = "\u2060";
+export const IC_HairSpace = "\u200A";
+export const IC_ThinSpace = "\u2009";

@@ -31,29 +31,5 @@ export const cooldown = 5;
 export const main = async (interaction: ChatInputCommandInteraction) => {
   try {
     BaseCommand(interaction, "unban");
-    
-    /*
-    ========================================
-    FUTURE MODERATION LOG SYSTEM
-    ========================================
-
-    const logChannelId = "LOG_CHANNEL_ID";
-
-    const logChannel = interaction.guild?.channels.cache.get(logChannelId);
-
-    if (logChannel && logChannel.isTextBased()) {
-
-      const logEmbed = new EmbedBuilder()
-        .setColor(0x57F287)
-        .setTitle("🔓 Member Unbanned")
-        .addFields(
-          { name: "User", value: `${bannedUser.user.tag} (${bannedUser.user.id})`, inline: true },
-          { name: "Moderator", value: `${interaction.user.tag}`, inline: true }
-        )
-        .setTimestamp();
-
-      logChannel.send({ embeds: [logEmbed] });
-    }
-    */
   } catch (err) { catchErrorInCommand(err, interaction, "unban") }
 };

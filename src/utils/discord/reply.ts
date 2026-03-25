@@ -1,5 +1,5 @@
-import { ActionRowBuilder, ButtonBuilder, ButtonInteraction, ChannelSelectMenuBuilder, ChatInputCommandInteraction, GuildMember, MentionableSelectMenuBuilder, RoleSelectMenuBuilder, StringSelectMenuBuilder, UserSelectMenuBuilder } from "discord.js";
-import { ExtractVars, TranslationKey, Translations, VarsFor } from "utils/locales/i18n.types";
+import { ActionRowBuilder, ButtonBuilder, ButtonInteraction, ChannelSelectMenuBuilder, ChatInputCommandInteraction, GuildMember, InteractionReplyOptions, MentionableSelectMenuBuilder, MessageFlags, RoleSelectMenuBuilder, StringSelectMenuBuilder, UserSelectMenuBuilder } from "discord.js";
+import { TranslationKey, VarsFor } from "utils/locales/i18n.types";
 import { warningEmbed } from "../embeds/warningEmbed";
 import { successEmbed } from "../embeds/successEmbed";
 import { errorEmbed } from "../embeds/errorEmbeds";
@@ -81,14 +81,28 @@ const constructOpt = <K extends TranslationKey> (
   options: ReplyOptions<K>
 ) => {
 
-  const lang = interaction.locale.split("-")[0]
+  const lang = interaction.locale.split("-")[0];
   const description = t(interaction, options.key, options.vars);
   const embed = buildEmbed(options.type ?? "success", description, lang);
 
-  return {embed, opt : {
+  const opt: InteractionReplyOptions = {
     embeds: [embed],
     components: options.components ?? [],
-    ...(options.ephemeral && { ephemeral: options.ephemeral }),
-    ...(options.withResponse && { withResponse: options.withResponse }),
-  }}
-}
+  };
+
+  if (options.ephemeral) {
+    opt.flags = MessageFlags.Ephemeral;
+  }
+
+  if (options.withResponse) {
+    return {
+      embed,
+      opt: {
+        ...opt,
+        withResponse: true as const,
+      },
+    };
+  }
+
+  return { embed, opt };
+};

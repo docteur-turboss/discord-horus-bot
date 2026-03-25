@@ -68,6 +68,7 @@ export const BaseCommand = async (
     confirmFunc, 
     successKey,
     confirmKey,
+    logFunc,
     key,
   } = setupAllReponseContext(interaction, type, targetMember, targetUser, targetGuildChannel as BaseGuildTextChannel, vars);
 
@@ -87,6 +88,7 @@ export const BaseCommand = async (
         }).catch(() => null);
 
       await confirmFunc();
+      await logFunc();
     },
   });
 };

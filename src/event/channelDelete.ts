@@ -1,10 +1,6 @@
 import { 
   NonThreadGuildBasedChannel,
   AuditLogEvent,
-  VoiceChannel,
-  ForumChannel,
-  ChannelType,
-  TextChannel,
   DMChannel,
   Events,
 } from "discord.js";

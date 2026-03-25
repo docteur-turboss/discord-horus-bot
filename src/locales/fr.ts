@@ -51,7 +51,7 @@ export default {
   "embeds.logs.fields.user": "Utilisateur",
   "embeds.logs.fields.user_limit": "Limite d'utilisateurs",
   "embeds.logs.fields.user.not_found": "Utilisateur inconnu",
-  "embeds.logs.fields.user_responsable": "Responsable",
+  "embeds.logs.fields.user.responsable": "Responsable",
   "embeds.logs.message": "📝 Logs des messages",
   "embeds.logs.message.delete.description": "Un message a été supprimé.",
   "embeds.logs.message.update.description": "Un message a été modifié.",

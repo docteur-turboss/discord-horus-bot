@@ -1,7 +1,10 @@
 export default {
+  "action.btns.actif": "Online",
   "action.btns.cancel": "Cancel",
   "action.btns.confirm": "Confirm",
+  "action.btns.inactif": "Offline",
 
+  "channel.log_system": "System Logs",
   "channel.type.announcement": "Announcement channel",
   "channel.type.forum": "Forum channel",
   "channel.type.stage": "Stage channel",
@@ -52,7 +55,9 @@ export default {
   "embeds.logs.roles.delete.description": "A role has been deleted.",
   "embeds.logs.roles.update.description": "A role has been updated.",
   "embeds.logs.tickets": "🎫 Ticket logs",
+  "embeds.logs.title": "Logs configurations",
   "embeds.logs.transcriptions": "📄 Transcription logs",
+  "embeds.logs.successful_created": "Logging system successfully configured in **{channel}**",
   "embeds.success": "✅ Success",
   "embeds.warning": "⚠️ Warning",
 
@@ -116,6 +121,7 @@ export default {
   "errors.invalid_bulk_delete_timestamp": "Cannot delete messages older than 14 days.",
   "errors.invalid_timestamp": "The provided duration is invalid. The maximum timeout is 28 days.",
   "errors.invalid_user_id": "The provided user ID is invalid.",
+  "errors.log_already_exist": "A log system channel already exists.",
   "errors.no_command_found": "How the hell did you even get this error?",
   "errors.no_permission_add_reactions": "You don't have permission to add reactions.",
   "errors.no_permission_administrator": "You need administrator permissions.",

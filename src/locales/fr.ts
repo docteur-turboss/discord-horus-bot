@@ -1,7 +1,10 @@
 export default {
+  "action.btns.actif": "Actif",
   "action.btns.cancel": "Annuler",
   "action.btns.confirm": "Confirmer",
+  "action.btns.inactif": "Désactif",
 
+  "channel.log_system": "Logs système",
   "channel.type.announcement": "Salon d'annonces",
   "channel.type.forum": "Salon forum",
   "channel.type.stage": "Salon de scène",
@@ -52,7 +55,9 @@ export default {
   "embeds.logs.roles.delete.description": "Un rôle a été supprimé.",
   "embeds.logs.roles.update.description": "Un rôle a été modifié.",
   "embeds.logs.tickets": "🎫 Logs des tickets",
+  "embeds.logs.title": "Configuration des logs",
   "embeds.logs.transcriptions": "📄 Logs des transcriptions",
+  "embeds.logs.successful_created": "Système de log configuré avec succès dans **{channel}**",
   "embeds.success": "✅ Succès",
   "embeds.warning": "⚠️ Attention",
 
@@ -116,6 +121,7 @@ export default {
   "errors.invalid_bulk_delete_timestamp": "Impossible de supprimer des messages de plus de 14 jours",
   "errors.invalid_timestamp": "La durée fournie est invalide. Le timeout maximum est de 28 jours.",
   "errors.invalid_user_id": "L'identifiant utilisateur fourni est invalide.",
+  "errors.log_already_exist": "Un système de log est déjà existant.",
   "errors.no_command_found": "Comment diable t'as pu avoir cette erreur ?",
   "errors.no_permission_add_reactions": "Vous n'avez pas la permission d'ajouter des réactions.",
   "errors.no_permission_administrator": "Vous devez avoir la permission administrateur.",

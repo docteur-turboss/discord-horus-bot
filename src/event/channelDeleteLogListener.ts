@@ -6,6 +6,7 @@ import {
   ButtonBuilder,
   ButtonStyle,
   DMChannel,
+  MessageFlags,
 } from "discord.js";
 import {
   IC_ThinSpace,
@@ -13,6 +14,7 @@ import {
   IC_ZeroWidthNonJoiner,
   IC_ZeroWidthSpace,
 } from "utils/consts/invisiblesChars";
+import { logPanelContainer } from "utils/discord/logPanelContainer";
 import { logger } from "utils/logger/logger";
 
 export const data = {
@@ -75,41 +77,39 @@ export const main = async (
 
     const [, type] = typeEntry;
 
-    const dashboard = guild.channels.cache.find((ch) => {
+    const channels = guild.channels.cache.filter(ch => {
       if (!ch.isTextBased()) return false;
       if (!("topic" in ch)) return false;
+      return true;
+    })
 
-      return ch.topic?.includes(IC_ThinSpace);
+    const hasMessageLog = channels.some(ch => ("topic" in ch) && ch.topic?.includes(IC_ZeroWidthSpace));
+    const hasRoleLog = channels.some(ch => ("topic" in ch) && ch.topic?.includes(IC_ZeroWidthNonJoiner));
+    const hasChannelLog = channels.some(ch => ("topic" in ch) && ch.topic?.includes(IC_ZeroWidthJoiner));
+    
+    const dashboard = channels.find((ch) => {
+        if (!("topic" in ch)) return false;
+        return ch.topic?.includes(IC_ThinSpace);
     }) as TextChannel | undefined;
     if (!dashboard) return;
 
+    const lang = guild.preferredLocale.split("-")[0];
+    const container = logPanelContainer({
+      hasRoleLog,
+      interaction: lang,
+      hasChannelLog,
+      hasMessageLog,
+    });
+
     const messages = await dashboard.messages.fetch({ limit: 10 });
     const botMessage = messages.find(m => m.author.id === guild.members.me?.id);
-
-    if (!botMessage) return;
-
-    const disabledStyle = ButtonStyle.Secondary;
-
-    //
-    const row = new ActionRowBuilder<ButtonBuilder>().addComponents(
-      new ButtonBuilder()
-        .setCustomId("log_message_toggle")
-        .setLabel("Messages")
-        .setStyle(type === "message" ? disabledStyle : ButtonStyle.Success),
-
-      new ButtonBuilder()
-        .setCustomId("log_roles_toggle")
-        .setLabel("Roles")
-        .setStyle(type === "role" ? disabledStyle : ButtonStyle.Success),
-
-      new ButtonBuilder()
-        .setCustomId("log_channels_toggle")
-        .setLabel("Channels")
-        .setStyle(type === "channel" ? disabledStyle : ButtonStyle.Success),
-    );
+    if (!botMessage) return dashboard.send({
+      components: [container],
+      flags: MessageFlags.IsComponentsV2
+    });
 
     await botMessage.edit({
-      components: [row],
+      components: [container],
     });
 
   } catch (error) {

@@ -5,18 +5,18 @@ import { TranslationKey } from "utils/locales/i18n.types";
 const buildSection = (
   key: string,
   isActive: boolean,
-  interaction: ChatInputCommandInteraction|ButtonInteraction
+  interaction: ChatInputCommandInteraction|string
 ) => {
   return (section: SectionBuilder) =>
     section
     .addTextDisplayComponents(textDisplay => 
       textDisplay.setContent(
-        t(interaction, `embeds.logs.${key}.${isActive ? "inactif" : "actif"}` as TranslationKey)
+        t(interaction, `embeds.logs.${key}` as TranslationKey)
       )
     )
     .setButtonAccessory(button => 
       button
-        .setCustomId(`embeds.logs.${key}.actif`)
+        .setCustomId(`embeds.logs.${key}.${isActive ? "inactif" : "actif"}`)
         .setLabel(t(interaction, `action.btns.${isActive ? "actif" : "inactif"}`))
         .setStyle(isActive ? ButtonStyle.Success : ButtonStyle.Secondary)
     );
@@ -28,7 +28,7 @@ export const logPanelContainer = ({
   hasMessageLog,
   hasChannelLog,
 }:{
-  interaction: ChatInputCommandInteraction|ButtonInteraction,
+  interaction: ChatInputCommandInteraction|string,
   hasMessageLog: boolean,
   hasChannelLog: boolean,
   hasRoleLog: boolean,
@@ -40,7 +40,7 @@ export const logPanelContainer = ({
   .addSeparatorComponents((separator) => separator)
   .addSectionComponents(buildSection("message", hasMessageLog, interaction))
   .addSectionComponents(buildSection("roles", hasRoleLog, interaction))
-  .addSectionComponents(buildSection("channels", hasChannelLog, interaction))
-  .addSectionComponents(buildSection("candidatures", false, interaction))
-  .addSectionComponents(buildSection("tickets", false, interaction))
-  .addSectionComponents(buildSection("transcriptions", false, interaction));
+  .addSectionComponents(buildSection("channels", hasChannelLog, interaction));
+  // .addSectionComponents(buildSection("candidatures", false, interaction))
+  // .addSectionComponents(buildSection("tickets", false, interaction))
+  // .addSectionComponents(buildSection("transcriptions", false, interaction));

@@ -1,15 +1,15 @@
 import {
   ButtonInteraction,
+  MessageFlags,
   ChannelType,
   TextChannel,
-  MessageFlags,
 } from "discord.js";
 import { IC_ZeroWidthJoiner, IC_ZeroWidthNonJoiner, IC_ZeroWidthSpace } from "utils/consts/invisiblesChars";
 import { logPanelContainer } from "utils/discord/logPanelContainer";
 import { t } from "utils/locales/i18n";
 
 export const data = {
-  name : "embeds.logs.message.actif"
+  name : "embeds.logs.channels.actif"
 }
 
 export const main = async (interaction: ButtonInteraction) => {
@@ -21,14 +21,13 @@ export const main = async (interaction: ButtonInteraction) => {
   const categoryId = currentChannel.parentId;
 
   const logChannel = await guild.channels.create({
-    name: t(interaction, "embeds.logs.message"),
+    name: t(interaction, "embeds.logs.channels"),
     type: ChannelType.GuildText,
     parent: categoryId ?? undefined,
-    topic: `${IC_ZeroWidthSpace} `,
+    topic: `${IC_ZeroWidthJoiner} `,
   });
 
   const message = interaction.message;
-
   if (!message || !message.components.length) return;
 
   const channels = guild.channels.cache.filter(ch => {
@@ -36,13 +35,12 @@ export const main = async (interaction: ButtonInteraction) => {
     if (!("topic" in ch)) return false;
     return true;
   });
-  
+
   const hasMessageLog = channels.some(ch => ("topic" in ch) && ch.topic?.includes(IC_ZeroWidthSpace));
   const hasRoleLog = channels.some(ch => ("topic" in ch) && ch.topic?.includes(IC_ZeroWidthNonJoiner));
   const hasChannelLog = channels.some(ch => ("topic" in ch) && ch.topic?.includes(IC_ZeroWidthJoiner));
   
   const lang = guild.preferredLocale.split("-")[0];
-
   const container = logPanelContainer({
     hasRoleLog,
     interaction: lang,

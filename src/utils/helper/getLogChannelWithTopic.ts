@@ -17,10 +17,10 @@ export const findChannelByTopic = (channels: Collection<string, TextChannel>, to
 
 export const computeLogState = (channels: Collection<string, TextChannel>) => {
   return {
+    hasRoleLog: !!findChannelByTopic(channels, LOG_TOPICS.roles),
     hasMessageLog: !!findChannelByTopic(channels, LOG_TOPICS.message),
-    hasRoleLog: !!findChannelByTopic(channels, LOG_TOPICS.role),
-    hasChannelLog: !!findChannelByTopic(channels, LOG_TOPICS.channel),
-    // hasModerationLog: !!findChannelByTopic(channels, LOG_TOPICS.channel),
+    hasChannelLog: !!findChannelByTopic(channels, LOG_TOPICS.channels),
+    hasModerationLog: !!findChannelByTopic(channels, LOG_TOPICS.moderation),
   };
 };
 

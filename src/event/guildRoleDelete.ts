@@ -1,8 +1,8 @@
 import { t } from "../utils/locales/i18n";
 import { logger } from "utils/logger/logger";
 import { logEmbed } from "utils/embeds/logEmbed";
-import { getLogRole } from "utils/discord/getLogRole";
 import { AuditLogEvent, Events, Role } from "discord.js";
+import { getLogRoleChannel } from "utils/discord/getLogRoleChannel";
 import { getExecutorFromAuditLog } from "utils/helper/getExecutorFromAuditLog";
 
 export const data = {
@@ -22,7 +22,7 @@ export const main = async (
     const member = await getExecutorFromAuditLog(guild, AuditLogEvent.RoleDelete)
     if(!member) return;
 
-    const logChannel = getLogRole(guild);
+    const logChannel = getLogRoleChannel(guild);
     if (!logChannel) return;
 
     const lang = guild.preferredLocale.split("-")[0]

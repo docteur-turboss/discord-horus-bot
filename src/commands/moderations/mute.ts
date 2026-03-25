@@ -57,31 +57,5 @@ export const cooldown = 5;
 export const main = async (interaction: ChatInputCommandInteraction) => {
   try {
     BaseCommand(interaction, "mute");
-    
-    /*
-    ========================================
-    FUTURE MODERATION LOG SYSTEM
-    ========================================
-
-    const logChannelId = "LOG_CHANNEL_ID";
-
-    const logChannel = interaction.guild?.channels.cache.get(logChannelId);
-
-    if (logChannel && logChannel.isTextBased()) {
-
-      const logEmbed = new EmbedBuilder()
-        .setColor(0x5865F2)
-        .setTitle("🔇 Member Muted")
-        .addFields(
-          { name: "User", value: `${targetUser.tag} (${targetUser.id})`, inline: true },
-          { name: "Moderator", value: `${interaction.user.tag}`, inline: true },
-          { name: "Duration", value: `${duration} minutes`, inline: true },
-          { name: "Reason", value: reason || "No reason provided", inline: false }
-        )
-        .setTimestamp();
-
-      logChannel.send({ embeds: [logEmbed] });
-    }
-    */
   } catch (err) { catchErrorInCommand(err, interaction, "mute") }
 };

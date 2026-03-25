@@ -5,18 +5,20 @@ import { t } from "utils/locales/i18n";
 type logType = 
   | "transcriptions"
   | "candidatures"
+  | "moderation"
   | "channels"
   | "message"
   | "tickets"
   | "roles";
   
 const LOG_TYPE_TRANSLATION_KEY: Record<logType, TranslationKey> = {
+  roles: "embeds.logs.roles",
   message: "embeds.logs.message",
-  channels: "embeds.logs.channels",
   tickets: "embeds.logs.tickets",
+  channels: "embeds.logs.channels",
+  moderation: "embeds.logs.moderation",
   candidatures: "embeds.logs.candidatures",
   transcriptions: "embeds.logs.transcriptions",
-  roles: "embeds.logs.roles",
 };
 
 export const translateTitle = ({

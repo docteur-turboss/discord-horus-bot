@@ -2,9 +2,9 @@ import { Guild, TextChannel } from "discord.js";
 import { getTextChannelsWithTopic, findChannelByTopic } from "utils/helper/getLogChannelWithTopic";
 import { LOG_TOPICS } from "utils/consts/logTypes";
 
-export const getLogChannel = (guild: Guild) => {
+export const getLogModerationChannel = (guild: Guild) => {
   return findChannelByTopic(
     getTextChannelsWithTopic(guild),
-    LOG_TOPICS.channels
+    LOG_TOPICS.moderation
   ) as TextChannel | null;
 };

@@ -1,4 +1,4 @@
-import { ButtonInteraction, ButtonStyle, ChatInputCommandInteraction, ContainerBuilder, SectionBuilder } from "discord.js";
+import { ButtonStyle, ChatInputCommandInteraction, ContainerBuilder, SectionBuilder } from "discord.js";
 import { t } from "../locales/i18n";
 import { TranslationKey } from "utils/locales/i18n.types";
 
@@ -27,11 +27,13 @@ export const logPanelContainer = ({
   interaction,
   hasMessageLog,
   hasChannelLog,
+  hasModerationLog
 }:{
   interaction: ChatInputCommandInteraction|string,
   hasMessageLog: boolean,
   hasChannelLog: boolean,
   hasRoleLog: boolean,
+  hasModerationLog: boolean,
 }) => new ContainerBuilder()
   .setAccentColor(0x5865F2)
   .addTextDisplayComponents((textDiplay) =>
@@ -40,6 +42,7 @@ export const logPanelContainer = ({
   .addSeparatorComponents((separator) => separator)
   .addSectionComponents(buildSection("message", hasMessageLog, interaction))
   .addSectionComponents(buildSection("roles", hasRoleLog, interaction))
+  .addSectionComponents(buildSection("moderation", hasModerationLog, interaction))
   .addSectionComponents(buildSection("channels", hasChannelLog, interaction));
   // .addSectionComponents(buildSection("candidatures", false, interaction))
   // .addSectionComponents(buildSection("tickets", false, interaction))

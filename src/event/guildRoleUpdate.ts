@@ -1,12 +1,11 @@
-import { AuditLogEvent, Events, Role, TextChannel } from "discord.js";
-import { IC_ZeroWidthNonJoiner } from "utils/consts/invisiblesChars";
+
+import { getExecutorFromAuditLog } from "utils/helper/getExecutorFromAuditLog";
+import { diffRolePermissions } from "utils/helper/formatPermissions";
+import { getLogRoleChannel } from "utils/discord/getLogRoleChannel";
+import { AuditLogEvent, Events, Role } from "discord.js";
 import { logEmbed } from "utils/embeds/logEmbed";
 import { logger } from "utils/logger/logger";
 import { t } from "utils/locales/i18n";
-import { formatPerm } from "utils/helper/formatPerm";
-import { getExecutorFromAuditLog } from "utils/helper/getExecutorFromAuditLog";
-import { getLogRole } from "utils/discord/getLogRole";
-import { diffRolePermissions } from "utils/helper/formatPermissions";
 
 export const data = {
   event: Events.GuildRoleUpdate,
@@ -25,7 +24,7 @@ export const main = async (
     const member = await getExecutorFromAuditLog(guild, AuditLogEvent.RoleUpdate)
     if(!member) return;
 
-    const logChannel = getLogRole(guild);
+    const logChannel = getLogRoleChannel(guild);
     if (!logChannel) return;
 
     const lang = guild.preferredLocale.split("-")[0];

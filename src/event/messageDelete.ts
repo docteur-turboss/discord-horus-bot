@@ -1,6 +1,5 @@
 import { Events, Message, OmitPartialGroupDMChannel, PartialMessage, TextChannel } from "discord.js";
 import { getMessageLogChannel } from "utils/discord/getMessageLogChannel";
-import { IC_ZeroWidthSpace } from "utils/consts/invisiblesChars";
 import { formatContent } from "utils/helper/formatContent";
 import { logEmbed } from "utils/embeds/logEmbed";
 import { logger } from "utils/logger/logger";

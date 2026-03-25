@@ -9,6 +9,7 @@ export const data = {
 
 export const main = async (interaction: ButtonInteraction) => {
 	if (!interaction.isButton()) return;
+	if(interaction.customId === "confirm_action" || interaction.customId === "cancel_action") return;
 	const command = buttonsCommands.getButton(interaction.customId);
 
 	if (!command) {

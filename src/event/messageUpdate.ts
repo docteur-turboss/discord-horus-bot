@@ -1,5 +1,5 @@
-import { Events, Message, OmitPartialGroupDMChannel, PartialMessage, TextChannel } from "discord.js";
-import { IC_ZeroWidthSpace } from "utils/consts/invisiblesChars";
+import { Events, Message, OmitPartialGroupDMChannel, PartialMessage } from "discord.js";
+import { getMessageLogChannel } from "utils/discord/getMessageLogChannel";
 import { formatContent } from "utils/helper/formatContent";
 import { logEmbed } from "utils/embeds/logEmbed";
 import { logger } from "utils/logger/logger";
@@ -27,13 +27,7 @@ export const main = async (
     const guild = newMessage.guild;
     if(!guild) return;
 
-    const logChannel = guild.channels.cache.find((channel) => {
-      if (!channel.isTextBased()) return false;
-      if (!("topic" in channel)) return false;
-
-      const textChannel = channel as TextChannel;
-      return textChannel.topic?.includes(IC_ZeroWidthSpace);
-    }) as TextChannel | undefined;
+    const logChannel = getMessageLogChannel(guild);
     if (!logChannel) return;
 
     const lang = guild.preferredLocale.split("-")[0]

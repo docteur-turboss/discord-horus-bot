@@ -1,12 +1,12 @@
-import { Collection, Guild, TextChannel } from "discord.js";
-import { IC_ThinSpace, IC_ZeroWidthJoiner, IC_ZeroWidthNonJoiner, IC_ZeroWidthSpace } from "./invisiblesChars";
+import { IC_InvisibleSeparator, IC_ThinSpace, IC_ZeroWidthJoiner, IC_ZeroWidthNonJoiner, IC_ZeroWidthSpace,  } from "./invisiblesChars";
 
-export type LogType = "message" | "role" | "channel";
+export type LogType = "message" | "roles" | "channels" | "moderation";
 
 export const LOG_TOPICS: Record<LogType, string> = {
   message: IC_ZeroWidthSpace,
-  role: IC_ZeroWidthNonJoiner,
-  channel: IC_ZeroWidthJoiner,
+  roles: IC_ZeroWidthNonJoiner,
+  channels: IC_ZeroWidthJoiner,
+  moderation: IC_InvisibleSeparator,
 };
 
 export const DASHBOARD_TOPIC = IC_ThinSpace;

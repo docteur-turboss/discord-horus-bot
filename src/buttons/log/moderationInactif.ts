@@ -3,7 +3,7 @@ import {
 } from "discord.js";
 import { handleLogToggle } from "utils/discord/logToggleHandler";
 
-export const data = { name: "embeds.logs.roles.actif" };
+export const data = { name: "embeds.logs.moderation.inactif" };
 
 export const main = (interaction: ButtonInteraction) =>
-  handleLogToggle(interaction, "roles", true);
+  handleLogToggle(interaction, "moderation", false);

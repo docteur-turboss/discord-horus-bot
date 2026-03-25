@@ -1,4 +1,5 @@
 import { ChatInputCommandInteraction, InteractionContextType, PermissionFlagsBits, SlashCommandBuilder } from "discord.js";
+import { getLogModerationChannel } from "utils/discord/getLogModerationChannel";
 import { catchErrorInCommand } from "utils/validation/errorDuringCommand";
 import { BaseCommand } from "utils/commands/baseCommand";
 
@@ -43,41 +44,5 @@ export const cooldown = 5;
 export const main = async (interaction: ChatInputCommandInteraction) => {
   try {
     BaseCommand(interaction, "ban");
-    
-    /*
-    ========================================
-    FUTURE MODERATION LOG SYSTEM
-    ========================================
-
-    // Example: get log channel ID from config
-    const logChannelId = "LOG_CHANNEL_ID";
-
-    // Fetch the log channel
-    const logChannel = interaction.guild?.channels.cache.get(logChannelId);
-
-    // If the channel exists and is text based
-    if (logChannel && logChannel.isTextBased()) {
-
-      const logEmbed = new EmbedBuilder()
-        .setColor(0xED4245)
-        .setTitle("🔨 Member Banned")
-        .addFields(
-          { name: "User", value: `${targetUser.tag} (${targetUser.id})`, inline: true },
-          { name: "Moderator", value: `${interaction.user.tag}`, inline: true },
-          { name: "Reason", value: reason || "No reason provided", inline: false }
-        )
-        .setTimestamp();
-
-      logChannel.send({ embeds: [logEmbed] });
-    }
-
-    Possible improvements later:
-    - Send logs to a configurable channel
-    - Save moderation actions in a database
-    - Add case IDs (case #001, #002...)
-    - Log unban / kick / timeout actions
-    - Include user avatar & moderator avatar
-    - Include previous infractions
-    */
   } catch (err) { catchErrorInCommand(err, interaction, "ban") }
 }

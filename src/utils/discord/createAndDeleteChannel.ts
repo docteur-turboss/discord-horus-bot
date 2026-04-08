@@ -1,4 +1,4 @@
-import { ButtonInteraction, ChannelType, Collection, TextChannel } from "discord.js";
+import { ButtonInteraction, ChannelType, Collection, PermissionsBitField, TextChannel } from "discord.js";
 import { findChannelByTopic } from "utils/helper/getLogChannelWithTopic";
 import { LOG_TOPICS, LogType } from "utils/consts/logTypes";
 import { TranslationKey } from "utils/locales/i18n.types";
@@ -15,6 +15,12 @@ export const createLogChannel = async (
     name: t(interaction, `embeds.logs.${type}` as TranslationKey),
     type: ChannelType.GuildText,
     parent: currentChannel.parentId ?? undefined,
+    permissionOverwrites: [
+      {
+        id: guild.id,
+        deny: [PermissionsBitField.Flags.ViewChannel]
+      }
+    ],
     topic: `${LOG_TOPICS[type]} `,
   });
 };

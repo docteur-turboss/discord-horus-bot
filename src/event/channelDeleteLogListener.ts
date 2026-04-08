@@ -4,9 +4,6 @@ import {
   MessageFlags,
   NonThreadGuildBasedChannel,
 } from "discord.js";
-import {
-  IC_ThinSpace,
-} from "utils/consts/invisiblesChars";
 import { 
   hasTopic, 
   computeLogState, 
@@ -38,12 +35,16 @@ export const main = async (
 
     const channels = getTextChannelsWithTopic(guild);
 
-    if (topic.includes(IC_ThinSpace)) {
+    if (topic.includes(DASHBOARD_TOPIC)) {
       const managed = channels.filter(ch =>
         ALL_LOG_MARKERS.some(c => hasTopic(ch, c))
       );
 
-      await Promise.allSettled(managed.map(ch => ch.delete()));
+      await Promise.allSettled(managed.map(ch => {
+        ch.delete().catch(() => null);
+        ch.parent?.delete().catch(() => null);
+      }));
+      
       return;
     }
 
@@ -68,8 +69,7 @@ export const main = async (
 
     await botMessage.edit({
       components: [container],
-    });
-
+    }).catch(() => null);
   } catch (error) {
     logger.error("Error in log system channel delete listener", error as Record<string, unknown>);
   }

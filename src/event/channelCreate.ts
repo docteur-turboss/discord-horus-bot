@@ -47,11 +47,6 @@ export const main = async (
         inline: true,
       },
       {
-        name: t(lang, "embeds.logs.fields.parent"),
-        value: channel.parentId ? `<#${channel.parentId}>` : "*none*",
-        inline: true,
-      },
-      {
         name: t(lang, "embeds.logs.fields.position"),
         value: `\`${channel.position}\``,
         inline: true,

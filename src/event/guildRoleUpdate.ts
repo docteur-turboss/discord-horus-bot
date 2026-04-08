@@ -3,6 +3,7 @@ import { getExecutorFromAuditLog } from "utils/helper/getExecutorFromAuditLog";
 import { diffRolePermissions } from "utils/helper/formatPermissions";
 import { getLogRoleChannel } from "utils/discord/getLogRoleChannel";
 import { AuditLogEvent, Events, Role } from "discord.js";
+import { noneChar } from "utils/consts/expressionChars";
 import { logEmbed } from "utils/embeds/logEmbed";
 import { logger } from "utils/logger/logger";
 import { t } from "utils/locales/i18n";
@@ -58,7 +59,7 @@ export const main = async (
     if (oldRole.icon !== newRole.icon) {
       fields.push({
         name: t(lang, "embeds.logs.fields.icon.update"),
-        value: newRole.iconURL() ?? "*none*",
+        value: newRole.iconURL() ?? noneChar,
         inline: false,
       });
     }

@@ -1,4 +1,5 @@
 import { NonThreadGuildBasedChannel, Role } from "discord.js";
+import { noneChar } from "utils/consts/expressionChars";
 import { formatPerm } from "utils/helper/formatPerm";
 
 export const formatChannelPermissions = (
@@ -21,7 +22,7 @@ export const formatChannelPermissions = (
       })
       .filter(Boolean)
       .slice(0, limit)
-      .join("\n\n") || "*none*"
+      .join("\n\n") || noneChar
   );
 };
 
@@ -32,7 +33,7 @@ export const formatRolePermissions = (
 ) => {
   const perms = role.permissions.toArray().map((p) => formatPerm(p, lang));
 
-  if (!perms.length) return "*none*";
+  if (!perms.length) return noneChar;
 
   return perms.slice(0, limit).join(",\n") + (perms.length > limit ? "\n..." : "");
 };

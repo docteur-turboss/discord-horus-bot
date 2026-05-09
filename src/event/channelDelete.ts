@@ -21,7 +21,6 @@ export const main = async (
   channel: DMChannel | NonThreadGuildBasedChannel,
 ) => {
   if (!channel || channel.isDMBased() || !channel.guild) return;
-
   try {
     if(channel.partial) await channel.fetch().catch(() => null);
     const guild = channel.guild;
@@ -45,11 +44,6 @@ export const main = async (
       {
         name: t(lang, "embeds.logs.fields.type"),
         value: t(lang, CHANNEL_TYPE_MAP[channel.type] ?? "channel.type.unknown"),
-        inline: true,
-      },
-      {
-        name: t(lang, "embeds.logs.fields.parent"),
-        value: channel.parentId ? `<#${channel.parentId}>` : "*none*",
         inline: true,
       },
       {
@@ -77,7 +71,7 @@ export const main = async (
 
     await logChannel.send({
       embeds: [embed],
-    });
+    }).catch(() => null);
 
   } catch (error) {
     logger.error("Error in channel delete events listener", error as Record<string, unknown>);

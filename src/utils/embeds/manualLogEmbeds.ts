@@ -6,7 +6,7 @@ import { logEmbed } from "./logEmbed";
 
 type LogModerationType = Exclude<BaseCommandType, "lock-channel" | "unlock-channel">
 
-type LogChannelType = Extract<BaseCommandType, "lock-channel" | "unlock-channel">;
+type LogChannelType = Extract<BaseCommandType, "lock-channel" | "unlock-channel" | "set-slow-mode" | "remove-slow-mode" | "modify-slow-mode">;
 
 export const manuelModerationLogEmbed = async (interaction: ChatInputCommandInteraction, type: LogModerationType, vars : {
   user: GuildMember | User | null,
@@ -102,10 +102,19 @@ export const manuelChannelLogEmbed = async (interaction: ChatInputCommandInterac
   let description;
   switch (type) {
     case "lock-channel":
-      description = t(interaction, "moderation.ban_description")
+      description = t(interaction, "moderation.lock_description")
       break;
     case "unlock-channel":
-      description = t(interaction, "moderation.unmute_description")
+      description = t(interaction, "moderation.unlock_description")
+      break;
+    case "set-slow-mode":
+      description = t(interaction, "moderation.set_slowmode_description")
+      break;
+    case "remove-slow-mode":
+      description = t(interaction, "moderation.remove_slowmode_description")
+      break;
+    case "modify-slow-mode":
+      description = t(interaction, "moderation.modify_slowmode_description")
       break;
   }
 

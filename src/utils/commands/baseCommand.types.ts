@@ -8,4 +8,7 @@ export type BaseCommandType =
   | "purge-message"
   | "rename-member"
   | "unlock-channel"
+  | "set-slow-mode"
+  | "remove-slow-mode"
+  | "modify-slow-mode"
   | "reset-member-nickname";

@@ -12,6 +12,7 @@ import { getExecutorFromAuditLog } from "utils/helper/getExecutorFromAuditLog";
 import { formatChannelPermissions } from "utils/helper/formatPermissions";
 import { CHANNEL_TYPE_MAP } from "utils/consts/channelTypeMap";
 import { getLogChannel } from "utils/discord/getLogChannel";
+import { noneChar } from "utils/consts/expressionChars";
 import { logEmbed } from "utils/embeds/logEmbed";
 import { logger } from "utils/logger/logger";
 import { t } from "utils/locales/i18n";
@@ -52,7 +53,7 @@ export const main = async (
     if (oldChannel.parentId !== newChannel.parentId) {
       fields.push({
         name: t(lang, "embeds.logs.fields.parent"),
-        value: `${oldChannel.parentId ? `<#${oldChannel.parentId}>` : "*none*"} → ${newChannel.parentId ? `<#${newChannel.parentId}>` : "*none*"}`,
+        value: `${oldChannel.parentId ? `<#${oldChannel.parentId}>` : noneChar} → ${newChannel.parentId ? `<#${newChannel.parentId}>` : noneChar}`,
         inline: true,
       });
     }

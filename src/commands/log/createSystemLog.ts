@@ -4,13 +4,13 @@ import {
   PermissionFlagsBits, 
   SlashCommandBuilder,
   MessageFlags,
-  ChannelType,
 } from "discord.js";
-import { catchErrorInCommand } from "utils/validation/errorDuringCommand";
 import { reply } from "utils/discord/reply";
 import { logPanelContainer } from "utils/embeds/logPanelContainer";
-import { computeLogState, findDashboardChannel, getTextChannelsWithTopic } from "utils/helper/getLogChannelWithTopic";
 import { createLogDashboard } from "utils/discord/createLogDashboard";
+import { catchErrorInCommand } from "utils/validation/errorDuringCommand";
+import { catchErrorInCommand } from "utils/validation/errorDuringCommand";
+import { computeLogState, findDashboardChannel, getTextChannelsWithTopic } from "utils/helper/getLogChannelWithTopic";
 
 export const data = new SlashCommandBuilder()
 .setName("log")

@@ -27,23 +27,29 @@ export const logPanelContainer = ({
   interaction,
   hasMessageLog,
   hasChannelLog,
-  hasModerationLog
+  hasModerationLog,
+  hasTmpVoice
 }:{
   interaction: ChatInputCommandInteraction|string,
   hasMessageLog: boolean,
   hasChannelLog: boolean,
   hasRoleLog: boolean,
   hasModerationLog: boolean,
+  hasTmpVoice: boolean,
 }) => new ContainerBuilder()
   .setAccentColor(0x5865F2)
   .addTextDisplayComponents((textDiplay) =>
-    textDiplay.setContent(`# ${t(interaction, "embeds.logs.title")}`)
+    textDiplay.setContent(`# ${t(interaction, "embeds.logs.admin_title")}`)
   )
   .addSeparatorComponents((separator) => separator)
+  .addTextDisplayComponents((textDiplay) =>
+    textDiplay.setContent(`## ${t(interaction, "embeds.logs.category_logs")}`)
+  )
   .addSectionComponents(buildSection("message", hasMessageLog, interaction))
   .addSectionComponents(buildSection("roles", hasRoleLog, interaction))
   .addSectionComponents(buildSection("moderation", hasModerationLog, interaction))
-  .addSectionComponents(buildSection("channels", hasChannelLog, interaction));
-  // .addSectionComponents(buildSection("candidatures", false, interaction))
-  // .addSectionComponents(buildSection("tickets", false, interaction))
-  // .addSectionComponents(buildSection("transcriptions", false, interaction));
+  .addSectionComponents(buildSection("channels", hasChannelLog, interaction))
+  .addTextDisplayComponents((textDiplay) =>
+    textDiplay.setContent(`## ${t(interaction, "embeds.logs.category_voice")}`)
+  )
+  .addSectionComponents(buildSection("tmp_voice", hasTmpVoice, interaction));

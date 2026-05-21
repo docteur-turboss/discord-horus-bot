@@ -1,16 +1,14 @@
-import { ChannelType, ChatInputCommandInteraction, PermissionFlagsBits } from "discord.js";
+import { ChannelType, Guild, PermissionFlagsBits, TextChannel } from "discord.js";
 import { DASHBOARD_TOPIC } from "utils/consts/logTypes";
 import { t } from "utils/locales/i18n";
 
-export const createLogDashboard = async (interaction: ChatInputCommandInteraction) => {
-  const guild = interaction.guild!;
-
+export const createLogDashboard = async (guild: Guild, lang: string): Promise<TextChannel> => {
   const category = await guild.channels.create({
-    name: t(interaction, "channel.log_system"),
+    name: t(lang, "channel.log_system"),
     type: ChannelType.GuildCategory,
   });
 
-  return guild.channels.create({
+  const channel = await guild.channels.create({
     name: "dashboard",
     type: ChannelType.GuildText,
     parent: category.id,
@@ -22,4 +20,6 @@ export const createLogDashboard = async (interaction: ChatInputCommandInteractio
       },
     ],
   });
+
+  return channel as TextChannel;
 };

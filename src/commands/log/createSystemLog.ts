@@ -9,7 +9,6 @@ import { reply } from "utils/discord/reply";
 import { logPanelContainer } from "utils/embeds/logPanelContainer";
 import { createLogDashboard } from "utils/discord/createLogDashboard";
 import { catchErrorInCommand } from "utils/validation/errorDuringCommand";
-import { catchErrorInCommand } from "utils/validation/errorDuringCommand";
 import { computeLogState, findDashboardChannel, getTextChannelsWithTopic } from "utils/helper/getLogChannelWithTopic";
 
 export const data = new SlashCommandBuilder()
@@ -33,7 +32,7 @@ export const main = async (interaction: ChatInputCommandInteraction) => {
 
     const channels = getTextChannelsWithTopic(guild);
 
-    const state = computeLogState(channels);
+    const state = computeLogState(channels, guild.id);
 
     const dashboardCheck = await findDashboardChannel(guild, channels);
 
@@ -48,7 +47,7 @@ export const main = async (interaction: ChatInputCommandInteraction) => {
     const channel =
       dashboardCheck instanceof Object
         ? dashboardCheck
-        : await createLogDashboard(interaction);
+        : await createLogDashboard(guild, interaction.locale.split("-")[0]);
 
     const container = logPanelContainer({
       interaction,

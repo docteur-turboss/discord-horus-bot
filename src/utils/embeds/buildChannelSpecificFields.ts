@@ -66,5 +66,11 @@ export const buildChannelSpecificFields = (channel: any, lang: string) => {
     );
   }
 
+  if(channel.parentId) fields.push({
+    name: t(lang, "embeds.logs.fields.parent"),
+    value: `<#${channel.parentId}>`,
+    inline: true,
+  })
+  
   return fields;
 };

@@ -144,6 +144,36 @@ export const setupAllReponseContext = (
       });
 
       break;
+    case "set-slow-mode":
+      confirmKey = "moderation.set_slowmode_confirm";
+      successKey = "moderation.set_slowmode_success";
+      key = "cooldown.active";
+      confirmFunc = async () => await targetChannel?.setRateLimitPerUser(Number(vars.duration));
+      logFunc = async () => await manuelChannelLogEmbed(interaction, type, {
+        channel: targetChannel
+      });
+
+      break;
+    case "remove-slow-mode":
+      confirmKey = "moderation.remove_slowmode_confirm";
+      successKey = "moderation.remove_slowmode_success";
+      key = "cooldown.active";
+      confirmFunc = async () => await targetChannel?.setRateLimitPerUser(0);
+      logFunc = async () => await manuelChannelLogEmbed(interaction, type, {
+        channel: targetChannel
+      });
+
+      break;
+    case "modify-slow-mode":
+      confirmKey = "moderation.modify_slowmode_confirm";
+      successKey = "moderation.modify_slowmode_success";
+      key = "cooldown.active";
+      confirmFunc = async () => await targetChannel?.setRateLimitPerUser(Number(vars.duration));
+      logFunc = async () => await manuelChannelLogEmbed(interaction, type, {
+        channel: targetChannel
+      });
+
+      break;
     case "kick":
       confirmKey = "moderation.kick_confirm";
       successKey = "moderation.kick_success";

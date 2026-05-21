@@ -1,5 +1,6 @@
 import { Collection, Guild, TextChannel } from "discord.js";
 import { DASHBOARD_TOPIC, LOG_TOPICS } from "utils/consts/logTypes";
+import { tmpVoiceManager } from "utils/discord/tmpVoiceManager";
 
 export const getTextChannelsWithTopic = (guild: Guild) => {
   return guild.channels.cache.filter(
@@ -15,12 +16,20 @@ export const findChannelByTopic = (channels: Collection<string, TextChannel>, to
   return channels.find(ch => ch.topic?.includes(topic));
 };
 
-export const computeLogState = (channels: Collection<string, TextChannel>) => {
+export const findChannelsByTopic = (channels: Collection<string, TextChannel>, topic: string) => {
+  return channels.filter(ch => ch.topic?.includes(topic));
+};
+
+export const findLogChannel = (channels: Collection<string, TextChannel>, marker: string) =>
+  channels.find(ch => ch.topic?.startsWith(marker));
+
+export const computeLogState = (channels: Collection<string, TextChannel>, guildId: string) => {
   return {
-    hasRoleLog: !!findChannelByTopic(channels, LOG_TOPICS.roles),
-    hasMessageLog: !!findChannelByTopic(channels, LOG_TOPICS.message),
-    hasChannelLog: !!findChannelByTopic(channels, LOG_TOPICS.channels),
-    hasModerationLog: !!findChannelByTopic(channels, LOG_TOPICS.moderation),
+    hasRoleLog: !!findLogChannel(channels, LOG_TOPICS.roles),
+    hasMessageLog: !!findLogChannel(channels, LOG_TOPICS.message),
+    hasChannelLog: !!findLogChannel(channels, LOG_TOPICS.channels),
+    hasModerationLog: !!findLogChannel(channels, LOG_TOPICS.moderation),
+    hasTmpVoice: tmpVoiceManager.getTrackedChannels(guildId).length > 0,
   };
 };
 
@@ -36,4 +45,9 @@ export const findDashboardChannel = async (guild: Guild, channels: Collection<st
   );
 
   return botMessage ? "ALREADY_EXISTS" : existing;
+};
+
+export const findDashboardChannelByGuild = (guild: Guild) => {
+  const channels = getTextChannelsWithTopic(guild);
+  return channels.find(ch => hasTopic(ch, DASHBOARD_TOPIC)) ?? null;
 };

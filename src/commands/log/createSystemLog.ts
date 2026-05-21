@@ -4,20 +4,12 @@ import {
   PermissionFlagsBits, 
   SlashCommandBuilder,
   MessageFlags,
-  ChannelType,
 } from "discord.js";
-import { catchErrorInCommand } from "utils/validation/errorDuringCommand";
-import { 
-  IC_ThinSpace,
-  IC_ZeroWidthSpace,
-  IC_ZeroWidthJoiner,
-  IC_ZeroWidthNonJoiner,
-} from "utils/consts/invisiblesChars";
 import { reply } from "utils/discord/reply";
-import { t } from "utils/locales/i18n";
 import { logPanelContainer } from "utils/embeds/logPanelContainer";
-import { computeLogState, findDashboardChannel, getTextChannelsWithTopic } from "utils/helper/getLogChannelWithTopic";
 import { createLogDashboard } from "utils/discord/createLogDashboard";
+import { catchErrorInCommand } from "utils/validation/errorDuringCommand";
+import { computeLogState, findDashboardChannel, getTextChannelsWithTopic } from "utils/helper/getLogChannelWithTopic";
 
 export const data = new SlashCommandBuilder()
 .setName("log")
@@ -40,7 +32,7 @@ export const main = async (interaction: ChatInputCommandInteraction) => {
 
     const channels = getTextChannelsWithTopic(guild);
 
-    const state = computeLogState(channels);
+    const state = computeLogState(channels, guild.id);
 
     const dashboardCheck = await findDashboardChannel(guild, channels);
 
@@ -55,7 +47,7 @@ export const main = async (interaction: ChatInputCommandInteraction) => {
     const channel =
       dashboardCheck instanceof Object
         ? dashboardCheck
-        : await createLogDashboard(interaction);
+        : await createLogDashboard(guild, interaction.locale.split("-")[0]);
 
     const container = logPanelContainer({
       interaction,

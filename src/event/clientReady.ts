@@ -4,6 +4,7 @@ import { tmpVoiceManager } from "utils/discord/tmpVoiceManager";
 import { logPanelContainer } from "utils/embeds/logPanelContainer";
 import { computeLogState, getTextChannelsWithTopic, findDashboardChannelByGuild } from "utils/helper/getLogChannelWithTopic";
 import { createLogDashboard } from "utils/discord/createLogDashboard";
+import { validateRulesInGuild } from "utils/discord/validateRulesConfig";
 
 export const data = {
   event: Events.ClientReady,
@@ -40,10 +41,21 @@ const updateDashboardsOnStartup = async (client: Client) => {
   }
 };
 
+const validateRulesOnStartup = async (client: Client) => {
+  for (const guild of client.guilds.cache.values()) {
+    try {
+      await validateRulesInGuild(guild);
+    } catch (error) {
+      logger.error(`Failed to validate rules in guild ${guild.id}`, error as Record<string, unknown>);
+    }
+  }
+};
+
 export const main = async (client: Client ) => {
   logger.info(`Bot ready! Logged in as ${client.user?.tag}`);
 
   await tmpVoiceManager.scanGuildWebhooks(client);
   await tmpVoiceManager.recoverVoiceChannels(client);
   await updateDashboardsOnStartup(client);
+  await validateRulesOnStartup(client);
 }

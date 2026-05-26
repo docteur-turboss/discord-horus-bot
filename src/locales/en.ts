@@ -64,6 +64,8 @@ export default {
   "embeds.logs.roles.update.description": "A role has been updated.",
   "embeds.logs.tickets": "🎫 Ticket logs",
   "embeds.logs.admin_title": "Admin Dashboard",
+  "embeds.logs.auto_role": "Auto-role",
+  "embeds.logs.category_auto_role": "Auto-role",
   "embeds.logs.category_logs": "Logs",
   "embeds.logs.category_voice": "Voice Channels",
   "embeds.logs.title": "Logs configurations",
@@ -455,5 +457,18 @@ export default {
   "roles.remove_error": "An error occurred while removing the role from members.",
   "roles.hierarchy_error": "The bot cannot manage a role that is higher than or equal to its own highest role.",
   "roles.bot_role_error": "Cannot use a bot-managed role.",
-  "roles.everyone_error": "Cannot use the @everyone role."
+  "roles.everyone_error": "Cannot use the @everyone role.",
+
+  "auto_role.set": "Auto-role set to {role}!",
+  "auto_role.updating": "Setting up auto-role {role} — please wait (rate-limited)...",
+  "auto_role.removed": "Auto-role has been removed.",
+  "auto_role.updating_remove": "Removing auto-role — please wait (rate-limited)...",
+  "auto_role.not_configured": "No auto-role is currently configured for this server.",
+  "auto_role.select_placeholder": "Select a role...",
+  "auto_role.select_prompt": "Select a role to automatically assign to new members.",
+  "auto_role.current_role": "Current auto-role: {role}. Select a new role or deselect to remove it.",
+  "auto_role.no_selection": "No role was selected and no auto-role is configured.",
+  "auto_role.role_not_found": "The selected role no longer exists.",
+  "auto_role.set_error": "Failed to set auto-role.",
+  "auto_role.remove_error": "Failed to remove auto-role."
 } as const

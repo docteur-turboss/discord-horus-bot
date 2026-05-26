@@ -69,7 +69,7 @@ function clearState(interaction: Interaction): void {
 }
 
 function sessionExpiredEmbed(lang: string): EmbedBuilder {
-  return errorEmbed({ description: "Session expired. Please start over with `/send`.", lang });
+  return errorEmbed({ description: t(lang, "send.session_expired"), lang });
 }
 
 export function buildSendContainer(lang: string, state?: WizardState): ContainerBuilder {
@@ -300,7 +300,7 @@ function buildStep1CompleteContainer(lang: string): ContainerBuilder {
   return new ContainerBuilder()
     .setAccentColor(0x5865F2)
     .addTextDisplayComponents((td) =>
-      td.setContent("✅ **Step 1/2 complete!**\nClick **Continue** below for footer & timestamp options.")
+      td.setContent(t(lang, "send.step1_complete"))
     )
     .addSeparatorComponents((s) => s)
     .addSectionComponents((section) =>
@@ -356,7 +356,7 @@ export const main = async (interaction: Interaction) => {
     logger.error("Error in send interaction handler", error as Record<string, unknown>);
     if (interaction.isRepliable() && !interaction.replied && !interaction.deferred) {
       await interaction.reply({
-        embeds: [errorEmbed({ description: "An unexpected error occurred.", lang })],
+        embeds: [errorEmbed({ description: t(lang, "send.error_unexpected"), lang })],
         flags: MessageFlags.Ephemeral,
       });
     }
@@ -492,7 +492,7 @@ async function handleEmbedModal1(interaction: ModalSubmitInteraction, lang: stri
   if (getState(interaction)?.followUpMessageId) {
     await (interaction as any).update({
       embeds: [successEmbed({
-        description: "✅ **Step 1/2 complete!** Click **Continue** below for footer & timestamp options.",
+        description: t(lang, "send.step1_complete"),
         lang,
       })],
       components: [

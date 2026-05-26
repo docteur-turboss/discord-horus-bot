@@ -1,5 +1,6 @@
+import "dotenv/config";
 import { env } from "config/env";
-import { commands } from "commands";
+import { commands } from "commands/index";
 import { REST, Routes } from "discord.js";
 import { logger } from "utils/logger/logger";
 

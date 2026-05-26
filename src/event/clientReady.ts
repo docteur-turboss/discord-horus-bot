@@ -1,6 +1,7 @@
 import { Client, Events, MessageFlags } from "discord.js";
 import { logger } from "utils/logger/logger";
 import { tmpVoiceManager } from "utils/discord/tmpVoiceManager";
+import { autoRoleManager } from "utils/discord/autoRoleManager";
 import { logPanelContainer } from "utils/embeds/logPanelContainer";
 import { computeLogState, getTextChannelsWithTopic, findDashboardChannelByGuild } from "utils/helper/getLogChannelWithTopic";
 import { createLogDashboard } from "utils/discord/createLogDashboard";
@@ -56,6 +57,7 @@ export const main = async (client: Client ) => {
 
   await tmpVoiceManager.scanGuildWebhooks(client);
   await tmpVoiceManager.recoverVoiceChannels(client);
+  await autoRoleManager.recoverFromGuilds(client);
   await updateDashboardsOnStartup(client);
   await validateRulesOnStartup(client);
 }

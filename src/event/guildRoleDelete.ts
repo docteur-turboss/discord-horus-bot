@@ -5,6 +5,7 @@ import { AuditLogEvent, Events, Role } from "discord.js";
 import { getLogRoleChannel } from "utils/discord/getLogRoleChannel";
 import { getExecutorFromAuditLog } from "utils/helper/getExecutorFromAuditLog";
 import { findRulesConfigsInGuild, cleanupRulesConfig } from "utils/discord/validateRulesConfig";
+import { autoRoleManager } from "utils/discord/autoRoleManager";
 
 export const data = {
   event: Events.GuildRoleDelete,
@@ -29,6 +30,10 @@ export const main = async (
     if(!guild) return;
 
     await cleanupDeletedRoleInRules(role.id, guild);
+
+    if (autoRoleManager.getAutoRole(guild.id) === role.id) {
+      await autoRoleManager.removeAutoRole(guild);
+    }
 
     const member = await getExecutorFromAuditLog(guild, AuditLogEvent.RoleDelete)
     if(!member) return;

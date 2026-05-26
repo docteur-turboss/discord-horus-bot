@@ -15,6 +15,7 @@ import { TMP_VOICE_DASHBOARD_TOPIC_MARKER, TMP_VOICE_TOPIC_MARKER } from "utils/
 import { logPanelContainer } from "utils/embeds/logPanelContainer";
 import { logger } from "utils/logger/logger";
 import { tmpVoiceManager } from "utils/discord/tmpVoiceManager";
+import { autoRoleManager } from "utils/discord/autoRoleManager";
 
 export const data = {
   event: Events.ChannelDelete,
@@ -66,6 +67,8 @@ export const main = async (
     if (topic.includes(TMP_VOICE_DASHBOARD_TOPIC_MARKER) || topic.includes(TMP_VOICE_TOPIC_MARKER)) return;
 
     if (topic.includes(DASHBOARD_TOPIC)) {
+      autoRoleManager.clearGuild(guild.id);
+
       const managed = channels.filter(ch =>
         ALL_LOG_MARKERS.some(c => hasTopic(ch, c))
       );

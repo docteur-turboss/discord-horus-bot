@@ -1,6 +1,5 @@
-import { ButtonInteraction, Events } from "discord.js";
+import { ButtonInteraction, DiscordAPIError, Events, MessageFlags } from "discord.js";
 import { logger } from "utils/logger/logger";
-import { t } from "utils/locales/i18n";
 import { reply } from "utils/discord/reply";
 
 export const data = {
@@ -47,10 +46,22 @@ export const main = async (interaction: ButtonInteraction) => {
     });
   } catch (error) {
     logger.error("Error in rules accept button handler", error as Record<string, unknown>);
+
+    if (error instanceof DiscordAPIError && error.code === 50013) {
+      if (!interaction.replied && !interaction.deferred) {
+        await reply(interaction, {
+          key: "rules.role_hierarchy_error",
+          type: "error",
+          ephemeral: true,
+        }).catch(() => null);
+      }
+      return;
+    }
+
     if (!interaction.replied && !interaction.deferred) {
       await interaction.reply({
         content: "An unexpected error occurred. Please try again or contact an administrator.",
-        ephemeral: true,
+        flags: MessageFlags.Ephemeral,
       }).catch(() => null);
     }
   }

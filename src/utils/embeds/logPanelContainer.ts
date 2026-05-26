@@ -28,7 +28,8 @@ export const logPanelContainer = ({
   hasMessageLog,
   hasChannelLog,
   hasModerationLog,
-  hasTmpVoice
+  hasTmpVoice,
+  hasAutoRole,
 }:{
   interaction: ChatInputCommandInteraction|string,
   hasMessageLog: boolean,
@@ -36,6 +37,7 @@ export const logPanelContainer = ({
   hasRoleLog: boolean,
   hasModerationLog: boolean,
   hasTmpVoice: boolean,
+  hasAutoRole: boolean,
 }) => new ContainerBuilder()
   .setAccentColor(0x5865F2)
   .addTextDisplayComponents((textDiplay) =>
@@ -49,7 +51,13 @@ export const logPanelContainer = ({
   .addSectionComponents(buildSection("roles", hasRoleLog, interaction))
   .addSectionComponents(buildSection("moderation", hasModerationLog, interaction))
   .addSectionComponents(buildSection("channels", hasChannelLog, interaction))
+  .addSeparatorComponents((separator) => separator)
   .addTextDisplayComponents((textDiplay) =>
     textDiplay.setContent(`## ${t(interaction, "embeds.logs.category_voice")}`)
   )
-  .addSectionComponents(buildSection("tmp_voice", hasTmpVoice, interaction));
+  .addSectionComponents(buildSection("tmp_voice", hasTmpVoice, interaction))
+  .addSeparatorComponents((separator) => separator)
+  .addTextDisplayComponents((textDiplay) =>
+    textDiplay.setContent(`## ${t(interaction, "embeds.logs.category_auto_role")}`)
+  )
+  .addSectionComponents(buildSection("auto_role", hasAutoRole, interaction));

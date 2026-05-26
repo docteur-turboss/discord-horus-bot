@@ -442,5 +442,18 @@ export default {
   "rules.embed_role_deleted_title": "Rôle Supprimé — Règlement Mis à Jour",
   "rules.invalid_image_url": "L'URL de l'image fournie n'est pas valide. Veuillez entrer une URL valide.",
   "rules.role_everyone": "Vous ne pouvez pas utiliser le rôle @everyone comme rôle d'acceptation.",
-  "rules.role_bot": "Vous ne pouvez pas utiliser un rôle géré par un bot comme rôle d'acceptation."
+  "rules.role_bot": "Vous ne pouvez pas utiliser un rôle géré par un bot comme rôle d'acceptation.",
+  "rules.role_hierarchy_error": "Le bot ne peut pas attribuer ce rôle car il est plus haut ou égal à son propre rôle le plus haut. Veuillez déplacer le rôle du bot au-dessus du rôle d'acceptation dans les paramètres du serveur.",
+
+  "roles.add_started": "Ajout du rôle {role} à tous les membres...",
+  "roles.add_progress": "Traités **{done}/{total}** membres...",
+  "roles.add_complete": "Rôle **{role}** ajouté à **{success}** membres. {failed} échecs.",
+  "roles.add_error": "Une erreur est survenue lors de l'ajout du rôle aux membres.",
+  "roles.remove_started": "Retrait du rôle {role} à tous les membres...",
+  "roles.remove_progress": "Traités **{done}/{total}** membres...",
+  "roles.remove_complete": "Rôle **{role}** retiré de **{success}** membres. {failed} échecs.",
+  "roles.remove_error": "Une erreur est survenue lors du retrait du rôle aux membres.",
+  "roles.hierarchy_error": "Le bot ne peut pas gérer un rôle plus haut ou égal à son propre rôle le plus haut.",
+  "roles.bot_role_error": "Impossible d'utiliser un rôle géré par un bot.",
+  "roles.everyone_error": "Impossible d'utiliser le rôle @everyone."
 }

@@ -442,5 +442,18 @@ export default {
   "rules.embed_role_deleted_title": "Role Deleted — Rules Updated",
   "rules.invalid_image_url": "The provided image URL is not valid. Please enter a valid URL.",
   "rules.role_everyone": "You cannot use the @everyone role as the accept role.",
-  "rules.role_bot": "You cannot use a bot-managed role as the accept role."
+  "rules.role_bot": "You cannot use a bot-managed role as the accept role.",
+  "rules.role_hierarchy_error": "The bot cannot assign this role because it is higher than or equal to its own highest role. Please move the bot's role above the accept role in the server settings.",
+
+  "roles.add_started": "Adding the {role} role to all members...",
+  "roles.add_progress": "Processed **{done}/{total}** members...",
+  "roles.add_complete": "Role **{role}** added to **{success}** members. {failed} failed.",
+  "roles.add_error": "An error occurred while adding the role to members.",
+  "roles.remove_started": "Removing the {role} role from all members...",
+  "roles.remove_progress": "Processed **{done}/{total}** members...",
+  "roles.remove_complete": "Role **{role}** removed from **{success}** members. {failed} failed.",
+  "roles.remove_error": "An error occurred while removing the role from members.",
+  "roles.hierarchy_error": "The bot cannot manage a role that is higher than or equal to its own highest role.",
+  "roles.bot_role_error": "Cannot use a bot-managed role.",
+  "roles.everyone_error": "Cannot use the @everyone role."
 } as const

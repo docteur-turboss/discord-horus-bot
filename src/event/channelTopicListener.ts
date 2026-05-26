@@ -56,17 +56,14 @@ export const main = async (
     if(!member) return;
 
     const hadInvisible = INVISIBLE_CHARS.some(char => oldTopic.includes(char));
-    const stillHasInvisible = INVISIBLE_CHARS.some(char => newTopic.includes(char));
+    const stillHasAllInvisible = INVISIBLE_CHARS.every(char =>
+      !oldTopic.includes(char) || newTopic.includes(char)
+    );
 
     if (!hadInvisible) return;
-    if (stillHasInvisible) return;
+    if (stillHasAllInvisible) return;
 
-    const lostChar = INVISIBLE_CHARS.find(char => oldTopic.includes(char));
-    if (!lostChar) return;
-
-    const updatedTopic = newTopic + lostChar;
-
-    await (newChannel as TextChannel).setTopic(updatedTopic);
+    await (newChannel as TextChannel).setTopic(oldTopic);
 
   } catch (error) {
     logger.error("Error in topic protection (channel update)", error as Record<string, unknown>);

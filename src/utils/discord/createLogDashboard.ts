@@ -12,7 +12,7 @@ export const createLogDashboard = async (guild: Guild, lang: string): Promise<Te
     name: "dashboard",
     type: ChannelType.GuildText,
     parent: category.id,
-    topic: `Logs ${DASHBOARD_TOPIC} channel. Do not delete or modify this channel, otherwise the logging system will stop working.`,
+    topic: `Dashboard ${DASHBOARD_TOPIC} channel. Do not delete or modify this channel, otherwise the system will stop working.`,
     permissionOverwrites: [
       {
         id: guild.roles.everyone.id,

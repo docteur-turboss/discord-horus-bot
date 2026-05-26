@@ -1,6 +1,7 @@
 import { Collection, Guild, TextChannel } from "discord.js";
 import { DASHBOARD_TOPIC, LOG_TOPICS } from "utils/consts/logTypes";
 import { tmpVoiceManager } from "utils/discord/tmpVoiceManager";
+import { AUTO_ROLE_TOPIC_MARKER } from "utils/consts/autoRoleTypes";
 
 export const getTextChannelsWithTopic = (guild: Guild) => {
   return guild.channels.cache.filter(
@@ -30,6 +31,7 @@ export const computeLogState = (channels: Collection<string, TextChannel>, guild
     hasChannelLog: !!findLogChannel(channels, LOG_TOPICS.channels),
     hasModerationLog: !!findLogChannel(channels, LOG_TOPICS.moderation),
     hasTmpVoice: tmpVoiceManager.getTrackedChannels(guildId).length > 0,
+    hasAutoRole: !!findChannelByTopic(channels, AUTO_ROLE_TOPIC_MARKER),
   };
 };
 

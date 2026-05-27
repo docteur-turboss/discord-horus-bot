@@ -23,7 +23,10 @@ import { ROLE_REACT_MENU_ID, ROLE_REACT_PREFIX, ROLE_REACT_WIZARD_PREFIX } from 
 import { errorEmbed } from "utils/embeds/errorEmbeds";
 import { infoEmbed } from "utils/embeds/infoEmbed";
 import { successEmbed } from "utils/embeds/successEmbed";
+import { warningEmbed } from "utils/embeds/warningEmbed";
 import { logger } from "utils/logger/logger";
+
+const MAX_ROLES = 25;
 import { t } from "utils/locales/i18n";
 
 type EmbedFieldData = {
@@ -183,13 +186,16 @@ function buildFinalComponents(
   state: WizardState,
   guild: { roles: { cache: Map<string, { name: string }> } } | undefined,
   lang: string,
-): ActionRowBuilder<ButtonBuilder | StringSelectMenuBuilder>[] {
+): { components: ActionRowBuilder<ButtonBuilder | StringSelectMenuBuilder>[]; truncated: number } {
+  const totalRoles = state.roleIds.length;
+  const roleIds = state.roleIds.slice(0, MAX_ROLES);
+
   if (state.type === "button") {
     const rows: ActionRowBuilder<ButtonBuilder>[] = [];
     let currentRow = new ActionRowBuilder<ButtonBuilder>();
     let count = 0;
 
-    for (const roleId of state.roleIds) {
+    for (const roleId of roleIds) {
       if (count === 5) {
         rows.push(currentRow);
         currentRow = new ActionRowBuilder<ButtonBuilder>();
@@ -206,26 +212,29 @@ function buildFinalComponents(
     }
 
     if (count > 0) rows.push(currentRow);
-    return rows;
+    return { components: rows, truncated: Math.max(0, totalRoles - MAX_ROLES) };
   }
 
-  const options = state.roleIds.map((roleId) => {
+  const options = roleIds.map((roleId) => {
     const label = getRoleName(roleId, guild);
     return new StringSelectMenuOptionBuilder()
       .setLabel(label)
       .setValue(roleId);
   });
 
-  return [
-    new ActionRowBuilder<StringSelectMenuBuilder>().addComponents(
-      new StringSelectMenuBuilder()
-        .setCustomId(ROLE_REACT_MENU_ID)
-        .setPlaceholder(t(lang, "role_react.select_placeholder"))
-        .setMinValues(1)
-        .setMaxValues(1)
-        .addOptions(options),
-    ),
-  ];
+  return {
+    components: [
+      new ActionRowBuilder<StringSelectMenuBuilder>().addComponents(
+        new StringSelectMenuBuilder()
+          .setCustomId(ROLE_REACT_MENU_ID)
+          .setPlaceholder(t(lang, "role_react.select_placeholder"))
+          .setMinValues(1)
+          .setMaxValues(1)
+          .addOptions(options),
+      ),
+    ],
+    truncated: Math.max(0, totalRoles - MAX_ROLES),
+  };
 }
 
 function buildPreviewButtons(lang: string): ActionRowBuilder<ButtonBuilder> {
@@ -527,11 +536,11 @@ async function handleModal2(interaction: ModalSubmitInteraction, lang: string): 
   const state = getState(interaction)!;
 
   const previewEmbed = buildFinalEmbed(state);
-  const components = buildFinalComponents(state, interaction.guild ?? undefined, lang);
+  const { components, truncated } = buildFinalComponents(state, interaction.guild ?? undefined, lang);
 
   if (state.followUpMessageId) {
     await (interaction as any).update({
-      embeds: [previewEmbed],
+      embeds: [previewEmbed, ...(truncated > 0 ? [warningEmbed({ description: t(lang, "role_react.truncated_warning", { count: String(truncated) }), lang })] : [])],
       components: [...components, buildPreviewButtons(lang)],
     });
   } else {
@@ -539,7 +548,7 @@ async function handleModal2(interaction: ModalSubmitInteraction, lang: string): 
       components: [buildTextContainer(`✅ ${t(lang, "role_react.preview_ready")}`)],
     });
     const followUp = await interaction.followUp({
-      embeds: [previewEmbed],
+      embeds: [previewEmbed, ...(truncated > 0 ? [warningEmbed({ description: t(lang, "role_react.truncated_warning", { count: String(truncated) }), lang })] : [])],
       components: [...components, buildPreviewButtons(lang)],
       flags: MessageFlags.Ephemeral,
     });
@@ -563,7 +572,7 @@ async function handleSend(interaction: ButtonInteraction, lang: string): Promise
   }
 
   const embed = buildFinalEmbed(state);
-  const components = buildFinalComponents(state, interaction.guild ?? undefined, lang);
+  const { components, truncated } = buildFinalComponents(state, interaction.guild ?? undefined, lang);
 
   try {
     await interaction.channel.send({ embeds: [embed], components });
@@ -571,6 +580,12 @@ async function handleSend(interaction: ButtonInteraction, lang: string): Promise
       embeds: [successEmbed({ description: t(lang, "role_react.sent"), lang })],
       components: [],
     });
+
+    if (truncated > 0) {
+      await interaction.channel.send({
+        embeds: [warningEmbed({ description: t(lang, "role_react.truncated_warning", { count: String(truncated) }), lang })],
+      });
+    }
   } catch (error) {
     const errMsg = error instanceof Error ? error.message : "Unknown error";
     await interaction.update({

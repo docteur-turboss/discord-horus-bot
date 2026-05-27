@@ -491,6 +491,11 @@ export default {
   "role_react.role_removed": "Role **{role}** removed!",
   "role_react.role_not_found": "This role is no longer available.",
   "role_react.error_send_failed": "Failed to send: {error}",
+  "role_react.truncated_warning": "⚠️ Warning: due to Discord limits, **{count}** role(s) could not be displayed.",
+  "role_react.template.age.title": "🎂 Age Group",
+  "role_react.template.age.desc": "Select your age group to access the corresponding channels.",
+  "role_react.template.sexe.title": "⚧ Gender",
+  "role_react.template.sexe.desc": "Select your gender to access the corresponding channels.",
 
   "auto_role.set": "Auto-role set to {role}!",
   "auto_role.updating": "Setting up auto-role {role} — please wait (rate-limited)...",
